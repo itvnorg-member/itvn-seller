@@ -180,7 +180,7 @@
     </form>
 </div>
 <div class="row">
-        <div class="ibox float-e-margins">
+        <div class="ibox float-e-margins pl-15 pr-15">
             @include('admin._partials._alert')
             <div class="ibox-content">
                 <div class="text-right" style="padding: 10px 10px 0px 10px;">
