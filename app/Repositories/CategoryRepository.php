@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Dinh Thien Phuoc -- Chich Chich Chich
+ * User: Dinh Thien Phuoc
  * Date: 7/23/2018
  * Time: 9:11 PM
  */

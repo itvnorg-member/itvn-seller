@@ -72,9 +72,9 @@ body{
 }
 
 .nav > li.active{
- background-color: #FFF;
- color: #293846;
- border-left: none;
+   background-color: #FFF;
+   color: #293846;
+   border-left: none;
 }
 
 .nav .nav-item a > .nav-label{
@@ -130,8 +130,20 @@ ul.nav-second-level{
     padding-left: 15px;
 }
 
+.mr-15{
+    margin-right: 15px;
+}
+
 .arrow{
     margin-top: 5px;
+}
+
+.c-ratio-color{
+    width: 20px;
+}
+
+.lbl-ratio{
+    margin-top: -10px;
 }
 
 /* END: Style for Layout */

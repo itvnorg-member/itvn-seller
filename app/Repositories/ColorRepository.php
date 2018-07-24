@@ -1,0 +1,114 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Dinh Thien Phuoc
+ * Date: 7/24/2018
+ * Time: 7:24 PM
+ */
+
+namespace App\Repositories;
+
+use App\Models\Color;
+use Illuminate\Support\Facades\Cache;
+use Yajra\DataTables\Facades\DataTables;
+
+Class ColorRepository
+{
+	const CACHE_NAME_COLORS = 'colors';
+
+	public function dataTable($request)
+	{
+		$colors = Color::select(['colors.id', 'colors.photo', 'colors.code','colors.name', 'colors.active', 'colors.created_at']);
+
+		$dataTable = DataTables::eloquent($colors)
+		->filter(function ($query) use ($request) {
+			if (trim($request->get('status')) !== "") {
+				$query->where('colors.active', $request->get('status'));
+			}
+
+			if (trim($request->get('keyword')) !== "") {
+				$query->where(function ($sub) use ($request) {
+					$sub->where('colors.name', 'like', '%' . $request->get('keyword') . '%');
+				});
+
+			}
+		}, true)
+		->addColumn('action', function ($Color) {
+			$html = '';
+			$html .= '<a href="' . route('admin.colors.view', ['id' => $Color->id]) . '" class="btn btn-xs btn-primary" style="margin-right: 5px"><i class="glyphicon glyphicon-edit"></i> Sửa</a>';
+			$html .= '<a href="#" class="bt-delete btn btn-xs btn-danger" data-id="' . $Color->id . '" data-name="' . $Color->name . '">';
+			$html .= '<i class="fa fa-trash-o" aria-hidden="true"></i> Xóa</a>';
+			return $html;
+		})
+		->addColumn('status', function ($Color) {
+			if ($Color->active === ACTIVE) {
+				$html = '<span class="label label-primary">Đã kích hoạt</span>';
+			} else {
+				$html = '<span class="label">Chưa kích hoạt</span>';
+			}
+			return $html;
+		})
+		->rawColumns(['status', 'action'])
+		->toJson();
+
+		return $dataTable;
+	}
+
+	public function addColor($color)
+	{
+		$colors = $this->getColors();
+		array_push($colors, $color);
+		Cache::forever(self::CACHE_NAME_COLORS, $colors);
+
+		return $color;
+	}
+
+	public function getColors()
+	{
+		return Cache::get(self::CACHE_NAME_COLORS, []);
+	}
+
+	public function getColor($id)
+	{
+		$data = Color::find($id);
+		return $data;
+	}
+
+	public function createOrUpdate($data, $id = null)
+	{
+		if ($id) {
+			$model = Color::find($id);
+		} else {
+			$model = new Color;
+		}
+
+		// $model->photo = $data['photo'];
+		$model->code = $data['code'];
+		$model->name = $data['name'];
+		$model->active = $data['active'];
+		$model->order = $data['order'];
+
+		$model->save();
+
+		return $model;
+	}
+
+	public function delete($ids)
+	{
+		$result = [
+			'success' => true,
+			'errors' => []
+		];
+		foreach ($ids as $id) {
+			$color = Color::find($id);
+			if ($color === null) {
+				$result['errors'][] = 'ID màu sắc: ' . $id . ' không tồn tại';
+				$result['success'] = false;
+				continue;
+			}
+			$color->delete();
+		}
+
+		return $result;
+	}
+}

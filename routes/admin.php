@@ -14,3 +14,9 @@ Route::get ('danh-muc-san-pham/chi-tiet', 'CategoryController@view')->name('admi
 Route::get ('danh-muc-san-pham/them', 'CategoryController@view')->name('admin.categories.create');
 Route::post ('danh-muc-san-pham/them', 'CategoryController@store')->name('admin.categories.store');
 Route::delete ('danh-muc-san-pham', 'CategoryController@delete')->name('admin.categories.delete');
+
+Route::get ('mau-sac', 'ColorController@index')->name('admin.colors.index');
+Route::get ('mau-sac/chi-tiet', 'ColorController@view')->name('admin.colors.view');
+Route::get ('mau-sac/them', 'ColorController@view')->name('admin.colors.create');
+Route::post ('mau-sac/them', 'ColorController@store')->name('admin.colors.store');
+Route::delete ('mau-sac', 'ColorController@delete')->name('admin.colors.delete');
