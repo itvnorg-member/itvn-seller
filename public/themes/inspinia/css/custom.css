@@ -79,13 +79,13 @@ body{
 
 .nav .nav-item a > .nav-label{
     text-transform: uppercase;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
 
 }
 
 .nav .nav-item a > i{
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .nav .nav-item.active a .nav-label{
@@ -128,6 +128,10 @@ ul.nav-second-level{
 
 .pl-15{
     padding-left: 15px;
+}
+
+.arrow{
+    margin-top: 5px;
 }
 
 /* END: Style for Layout */

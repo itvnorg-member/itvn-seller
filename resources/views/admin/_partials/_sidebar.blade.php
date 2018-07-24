@@ -25,6 +25,13 @@
                     <li class="{{ set_active(['quan-ly/thanh-vien/them']) }}"><a href="{{route('admin.users.create')}}">Thêm tài khoản</a></li>
                 </ul>
             </li>
+            <li class="{{ set_active(['admin/categories', 'admin/categories/*']) }} nav-item">
+                <a href="#"><i class="fa fa-user"></i> <span class="nav-label">Danh mục</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li class="{{ set_active(['quan-ly/thanh-vien']) }}"><a href="{{route('admin.categories.index')}}">Danh sách danh mục</a></li>
+                    <li class="{{ set_active(['quan-ly/thanh-vien/them']) }}"><a href="{{route('admin.categories.create')}}">Thêm danh mục</a></li>
+                </ul>
+            </li>
         </ul>
 
     </div>

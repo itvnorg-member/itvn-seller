@@ -1,3 +1,4 @@
+<!-- PHuoc chich -->
 @extends('admin.layouts.inspinia.master')
 
 @section('title', $title)
