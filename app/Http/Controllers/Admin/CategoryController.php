@@ -52,20 +52,21 @@ class CategoryController extends AdminController
     {
         $input = $this->_request->all();
         $id = $input['id'] ?? null;
+
         $rules = [
             'name' => 'required|string|max:50',
             'active' => 'required'
         ];
-        $message = 'The account has been created.';
+        $message = 'Danh mục sản phẩm đã được tạo.';
 
         if ($id) {
-            $rules['name'] = 'required|string|max:50|unique:name,' . $input['id'];
-            $message = 'The account has been updated.';
+            $rules['name'] = 'required|string|max:50|unique:categories,name,' . $input['id'];
+            $message = 'Danh mục sản phẩm đã được cập nhật.';
         }
 
         $validator = Validator::make($input, $rules);
-
         if ($validator->fails()) {
+            
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();

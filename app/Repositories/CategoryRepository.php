@@ -81,7 +81,9 @@ Class CategoryRepository
         } else {
             $model = new Category;
         }
+
         $model->name = $data['name'];
+        $data['parent_id'] = 0;
         if ($data['parent_id']) {
             $parent = Category::find($data['parent_id']);
         }
@@ -114,4 +116,5 @@ Class CategoryRepository
 
         return $result;
     }
+
 }
