@@ -11,6 +11,8 @@ namespace App\Repositories;
 use App\Models\Color;
 use Illuminate\Support\Facades\Cache;
 use Yajra\DataTables\Facades\DataTables;
+use App\Libraries\Photo;
+use Illuminate\Support\Facades\Storage;
 
 Class ColorRepository
 {
@@ -81,12 +83,22 @@ Class ColorRepository
 		} else {
 			$model = new Color;
 		}
-
-		// $model->photo = $data['photo'];
-		$model->code = $data['code'];
+		
 		$model->name = $data['name'];
 		$model->active = $data['active'];
 		$model->order = $data['order'];
+		if(isset($data['photo'])) {
+
+            if ($model->photo) {
+                Storage::delete($model->photo);
+            }
+            $upload = new Photo($data['photo']);
+            $model->photo = $upload->uploadTo('colors');
+            $model->code = "";
+        }else{
+        	$model->code = $data['code'];
+        	$model->photo = "";
+        }
 
 		$model->save();
 
@@ -106,6 +118,9 @@ Class ColorRepository
 				$result['success'] = false;
 				continue;
 			}
+			if ($color->photo) {
+                Storage::delete($user->photo);
+            }
 			$color->delete();
 		}
 

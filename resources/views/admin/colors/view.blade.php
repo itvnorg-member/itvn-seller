@@ -34,7 +34,7 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins pl-15 pr-15">
                 @include('admin._partials._alert')
-                <form role="form" method="POST" id="mainForm" action="{{route('admin.colors.store')}}">
+                <form role="form" method="POST" id="mainForm" action="{{route('admin.colors.store')}}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     @if (isset($data->id))
                         <input type="hidden" name="id" value="{{$data->id}}"/>
@@ -43,13 +43,14 @@
                         <div class="row">
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Hình ảnh/Mã màu (<span
-                                            class="text-danger">*</span>)</label>
+                                    class="text-danger">*</span>)</label>
                                 <div class="col-md-5">
-                                 <label for="photo" class="mr-15 lbl-ratio">
-                                    <input type="radio" checked name="color" placeholder="" class="form-control m-b c-ratio-color" value="photo"/>Hình ảnh</label>
-                                <label for="code" class="lbl-ratio"><input type="radio" name="color" placeholder="" class="form-control m-b c-ratio-color"
-                                 value="code"/>Mã màu</label>
-                                    
+                                    <label for="photo" class="mr-15 lbl-ratio">
+                                        <input type="radio" checked name="color" placeholder="" class="form-control m-b c-ratio-color" value="photo"/>Hình ảnh
+                                    </label>
+                                    <label for="code" class="lbl-ratio">
+                                        <input type="radio" name="color" placeholder="" class="form-control m-b c-ratio-color" value="code"/>Mã màu
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -60,11 +61,15 @@
                                             class="text-danger">*</span>)</label>
                                 <div class="col-md-5">
                                     <div class="fileinput fileinput-new" data-provides="fileinput">
-                                        <div class="fileinput-new thumbnail" style="width: 200px; height: 134px;">
-                                            <img src="" data-src="holder.js/100%x100%" alt=".">
+                                        <div class="fileinput-new thumbnail" style="width: 140px; height: 140px;">
+                                           @if(isset($data->photo) && !empty($data->photo))
+                                                <img alt="400x400" id="preview" data-src="holder.js/400x400" style="margin-bottom: 10px;width: 140px; height: 140px;" class="img-thumbnail" src="{{asset('storage/' .$data->photo)}}" data-holder-rendered="true">
+                                           @else
+                                                <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgdmlld0JveD0iMCAwIDE0MCAxNDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzE0MHgxNDAKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNjRjN2E0MDNlNSB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE2NGM3YTQwM2U1Ij48cmVjdCB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjQ0LjA1NDY4NzUiIHk9Ijc0LjUiPjE0MHgxNDA8L3RleHQ+PC9nPjwvZz48L3N2Zz4=" data-src="holder.js/100%x100%" alt=".">
+                                            @endif
                                         </div>
                                         <div class="fileinput-preview fileinput-exists thumbnail"
-                                             style="max-width: 200px; max-height: 134px;"></div>
+                                             style="max-width: 140px; max-height: 140px;"></div>
                                         <div>
                                         <span class="btn btn-default btn-file">
                                             <span class="fileinput-new">Select image</span>
