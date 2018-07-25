@@ -134,4 +134,11 @@ Class ColorRepository
 
 		return $result;
 	}
+
+    public function changeStatus($colorID, $status)
+    {
+        $model = Color::find($colorID);
+        $model->active = $status;
+        return $model->save();
+    }
 }

@@ -39,7 +39,7 @@
 
             @if(key_exists('product_manager', Auth::user()->permissions))
             <li class="{{ set_active(['quan-ly/danh-muc-san-pham*']) }} nav-item">
-                <a href="#"><i class="fa fa-user"></i> <span class="nav-label">Danh mục</span><span class="fa arrow"></span></a>
+                <a href="#"><i class="fa fa-user"></i> <span class="nav-label">Quản Lý Danh mục</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li class="{{ set_active(['quan-ly/danh-muc-san-pham']) }}"><a href="{{route('admin.categories.index')}}">Danh sách danh mục</a></li>
                     <li class="{{ set_active(['quan-ly/danh-muc-san-pham/them']) }}"><a href="{{route('admin.categories.create')}}">Thêm danh mục</a></li>
@@ -49,9 +49,9 @@
 
             @if(key_exists('product_manager', Auth::user()->permissions))
             <li class="{{ set_active(['quan-ly/mau-sac', 'quan-ly/mau-sac/*']) }} nav-item">
-                <a href="#"><i class="fa fa-paint-brush"></i> <span class="nav-label">Màu sắc</span><span class="fa arrow"></span></a>
+                <a href="#"><i class="fa fa-paint-brush"></i> <span class="nav-label">Quản Lý Màu sắc</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li class="{{ set_active(['quan-ly/mau-sac']) }}"><a href="{{route('admin.colors.index')}}">Màu sắc</a></li>
+                    <li class="{{ set_active(['quan-ly/mau-sac']) }}"><a href="{{route('admin.colors.index')}}">Danh sách Màu sắc</a></li>
                     <li class="{{ set_active(['quan-ly/mau-sac/them']) }}"><a href="{{route('admin.colors.create')}}">Thêm màu sắc</a></li>
                 </ul>
             </li>
