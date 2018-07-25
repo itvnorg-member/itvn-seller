@@ -131,6 +131,22 @@ ul.nav-second-level{
     padding-left: 15px;
 }
 
+.mr-10{
+  margin-right: 10px;
+}
+
+.c-code{
+  width:20px; 
+  height:20px;
+  float: left;
+}
+
+.c-code-name{
+  line-height: 20px;
+  float: left;
+  margin-left: 5px;
+}
+
 .arrow{
     margin-top: 5px;
 }

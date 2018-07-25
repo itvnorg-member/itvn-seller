@@ -12,8 +12,15 @@
 
             $("#i-color-code").colorpicker({popover:false});
 
-            $(".c-photo-group").show();
-            $(".c-code-group").hide();
+            if($(".c-ratio-photo").is(":checked")){
+                $(".c-photo-group").show();
+                $(".c-code-group").hide();
+            }else{
+                $(".c-photo-group").hide();
+                $(".c-code-group").show();
+            }
+
+            
             $('input[type=radio][name=color]').on('change', function(){
                 switch($(this).val()){
                     case 'photo' :
@@ -45,12 +52,24 @@
                                 <label class="col-md-2 control-label">Hình ảnh/Mã màu (<span
                                     class="text-danger">*</span>)</label>
                                 <div class="col-md-5">
-                                    <label for="photo" class="mr-15 lbl-ratio">
-                                        <input type="radio" checked name="color" placeholder="" class="form-control m-b c-ratio-color" value="photo"/>Hình ảnh
+                                    @if(isset($data->photo) && !empty($data->photo))
+                                    <label for="photo" class="mr-10 lbl-ratio">
+                                        <input type="radio" checked name="color" placeholder="" class="form-control m-b c-ratio-color c-ratio-photo" value="photo"/>Hình ảnh
                                     </label>
+                                    @else
+                                     <label for="photo" class="mr-10 lbl-ratio">
+                                        <input type="radio" name="color" placeholder="" class="form-control m-b c-ratio-color c-ratio-photo" value="photo"/>Hình ảnh
+                                    </label>
+                                    @endif
+                                    @if(isset($data->code) && !empty($data->code))
                                     <label for="code" class="lbl-ratio">
-                                        <input type="radio" name="color" placeholder="" class="form-control m-b c-ratio-color" value="code"/>Mã màu
+                                        <input type="radio" checked name="color" placeholder="" class="form-control m-b c-ratio-color c-ratio-code" value="code"/>Mã màu
                                     </label>
+                                    @else
+                                    <label for="code" class="lbl-ratio">
+                                        <input type="radio" name="color" placeholder="" class="form-control m-b c-ratio-color c-ratio-code" value="code"/>Mã màu
+                                    </label>
+                                    @endif
                                 </div>
                             </div>
                         </div>

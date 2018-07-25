@@ -50,7 +50,15 @@ Class ColorRepository
 			}
 			return $html;
 		})
-		->rawColumns(['status', 'action'])
+		->addColumn('code', function ($color) {
+			if (!empty($color->code)) {
+				$html = '<div class="c-code-wrapper"><div class="c-code" style="background-color: '.$color->code.';"></div><span class="c-code-name">'.$color->code.'</span></div>';
+			} else {
+				$html = '';
+			}
+			return $html;
+		})
+		->rawColumns(['code','status', 'action'])
 		->toJson();
 
 		return $dataTable;
