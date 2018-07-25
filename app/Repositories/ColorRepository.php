@@ -59,7 +59,15 @@ Class ColorRepository
 			}
 			return $html;
 		})
-		->rawColumns(['code','status', 'action'])
+		->addColumn('photo', function ($color) {
+                if ($color->photo) {
+                    $html = '<img style="width: 80px; height: 60px;" class="img-thumbnail" src="' . asset('storage/' . $color->photo). '" />';
+                } else {
+                    $html = ' <img alt="No Photo" style="width: 80px; height: 60px;" class="img-thumbnail" src="'.asset(NO_PHOTO).'" >';
+                }
+                return $html;
+            })
+		->rawColumns(['photo','code','status', 'action'])
 		->toJson();
 
 		return $dataTable;
