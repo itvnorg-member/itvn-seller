@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-07-25 08:35:18
+Date: 2018-07-25 09:33:19
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -86,19 +86,18 @@ DROP TABLE IF EXISTS `colors`;
 CREATE TABLE `colors` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `photo` varchar(255) DEFAULT NULL,
+  `code` varchar(20) DEFAULT NULL,
   `name` varchar(50) NOT NULL DEFAULT '',
   `active` tinyint(1) DEFAULT '1',
   `order` int(11) unsigned DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `code` varchar(7) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of colors
 -- ----------------------------
-INSERT INTO `colors` VALUES ('1', null, 'Hồng', '1', '1', '2018-07-24 09:44:32', '2018-07-24 09:44:32', '#e32d63');
 
 -- ----------------------------
 -- Table structure for migrations
@@ -145,15 +144,19 @@ CREATE TABLE `permissions` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of permissions
 -- ----------------------------
-INSERT INTO `permissions` VALUES ('1', 'Role management', 'role', '1', '0', '2018-04-09 04:46:03', '2018-04-09 04:47:03');
-INSERT INTO `permissions` VALUES ('2', 'User management', 'user', '1', '0', '2018-04-09 04:46:57', '2018-04-09 04:47:05');
-INSERT INTO `permissions` VALUES ('3', 'Setting', 'setting', '1', '0', '2018-04-09 04:47:16', '2018-04-09 04:47:16');
-INSERT INTO `permissions` VALUES ('4', 'Shop Manager', 'shop_manager', '1', '0', '2018-07-25 05:39:46', '2018-07-25 05:39:46');
+INSERT INTO `permissions` VALUES ('1', 'Cửa hàng', 'shop_manager', '1', '0', '2018-04-09 04:46:03', '2018-07-24 13:21:41');
+INSERT INTO `permissions` VALUES ('2', 'Quản lý bán hàng', 'seller_manager', '1', '0', '2018-04-09 04:46:57', '2018-07-24 13:21:26');
+INSERT INTO `permissions` VALUES ('3', 'Sản phẩm', 'product_manager', '1', '0', '2018-04-09 04:47:16', '2018-07-24 13:21:58');
+INSERT INTO `permissions` VALUES ('4', 'Kho hàng', 'warehouse_manager', '1', '0', '2018-07-24 13:22:43', '2018-07-24 13:22:43');
+INSERT INTO `permissions` VALUES ('5', 'Kế toán', 'accountant_manager', '1', '0', '2018-07-24 13:23:02', '2018-07-24 13:23:31');
+INSERT INTO `permissions` VALUES ('6', 'Quản lý tài khoản', 'user_manager', '1', '0', '2018-07-24 13:24:37', '2018-07-24 13:24:37');
+INSERT INTO `permissions` VALUES ('7', 'Thống kê', 'report_manager', '1', '0', '2018-07-24 13:25:00', '2018-07-24 13:25:00');
+INSERT INTO `permissions` VALUES ('8', 'Cài đặt', 'setting_manager', '1', '0', '2018-07-24 13:25:09', '2018-07-24 13:25:09');
 
 -- ----------------------------
 -- Table structure for products
@@ -161,9 +164,9 @@ INSERT INTO `permissions` VALUES ('4', 'Shop Manager', 'shop_manager', '1', '0',
 DROP TABLE IF EXISTS `products`;
 CREATE TABLE `products` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `category_id` int(11) unsigned DEFAULT NULL,
   `supplier_id` int(11) DEFAULT NULL,
   `brand_id` int(11) DEFAULT NULL,
+  `code` varchar(50) DEFAULT NULL,
   `barcode` varchar(50) DEFAULT NULL,
   `name` varchar(50) NOT NULL DEFAULT '',
   `colors` varchar(500) DEFAULT NULL,
@@ -172,15 +175,16 @@ CREATE TABLE `products` (
   `sell_price` int(11) DEFAULT NULL,
   `quantity` int(11) unsigned DEFAULT NULL,
   `quantity_available` int(10) unsigned DEFAULT NULL,
-  `photos` text,
+  `photo` varchar(255) DEFAULT '',
   `description` varchar(255) NOT NULL DEFAULT '',
   `content` text,
   `active` tinyint(1) DEFAULT '1',
   `order` int(11) unsigned DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `code` varchar(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `supplier_id` (`supplier_id`),
+  KEY `brand_id` (`brand_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -188,23 +192,67 @@ CREATE TABLE `products` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for product_category
+-- ----------------------------
+DROP TABLE IF EXISTS `product_category`;
+CREATE TABLE `product_category` (
+  `product_id` int(11) unsigned NOT NULL,
+  `category_id` int(11) unsigned DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY `product_id` (`product_id`,`category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of product_category
+-- ----------------------------
+INSERT INTO `product_category` VALUES ('1', '1', '2018-07-23 03:12:24', '2018-07-23 03:12:24');
+INSERT INTO `product_category` VALUES ('1', '2', '2018-07-23 03:12:28', '2018-07-23 03:12:28');
+
+-- ----------------------------
 -- Table structure for product_detail
 -- ----------------------------
 DROP TABLE IF EXISTS `product_detail`;
 CREATE TABLE `product_detail` (
-  `id` int(11) NOT NULL,
+  `id` int(11) unsigned NOT NULL,
   `product_id` int(11) unsigned NOT NULL,
-  `color_id` int(1) unsigned DEFAULT NULL,
+  `color_id` int(11) unsigned DEFAULT NULL,
   `size_id` int(11) unsigned DEFAULT NULL,
   `quantity` int(11) unsigned DEFAULT '0',
-  `photos` text,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `product_id` (`product_id`,`size_id`,`color_id`),
+  KEY `product_id_2` (`product_id`),
+  KEY `color_id` (`color_id`),
+  KEY `size_id` (`size_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of product_detail
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for product_photos
+-- ----------------------------
+DROP TABLE IF EXISTS `product_photos`;
+CREATE TABLE `product_photos` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) unsigned DEFAULT NULL,
+  `name` varchar(50) NOT NULL DEFAULT '',
+  `origin` varchar(255) NOT NULL DEFAULT '',
+  `large` varchar(255) NOT NULL,
+  `thumb` varchar(255) NOT NULL,
+  `color_code` varchar(20) NOT NULL,
+  `active` tinyint(1) DEFAULT '1',
+  `order` int(11) unsigned DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of product_detail
+-- Records of product_photos
 -- ----------------------------
 
 -- ----------------------------
@@ -247,7 +295,14 @@ CREATE TABLE `role_permission` (
 -- ----------------------------
 -- Records of role_permission
 -- ----------------------------
-INSERT INTO `role_permission` VALUES ('1', '4', '2018-07-25 05:44:38', '2018-07-25 05:44:38');
+INSERT INTO `role_permission` VALUES ('1', '1', '2018-07-24 13:59:18', '2018-07-24 13:59:18');
+INSERT INTO `role_permission` VALUES ('1', '2', '2018-07-24 13:59:25', '2018-07-24 13:59:25');
+INSERT INTO `role_permission` VALUES ('1', '3', '2018-07-24 13:59:28', '2018-07-24 13:59:28');
+INSERT INTO `role_permission` VALUES ('1', '4', '2018-07-24 13:59:31', '2018-07-24 13:59:31');
+INSERT INTO `role_permission` VALUES ('1', '5', '2018-07-24 13:59:34', '2018-07-24 13:59:34');
+INSERT INTO `role_permission` VALUES ('1', '6', '2018-07-24 13:59:37', '2018-07-24 13:59:37');
+INSERT INTO `role_permission` VALUES ('1', '7', '2018-07-24 13:59:41', '2018-07-24 13:59:41');
+INSERT INTO `role_permission` VALUES ('1', '8', '2018-07-24 13:59:43', '2018-07-24 13:59:43');
 
 -- ----------------------------
 -- Table structure for sizes
@@ -345,6 +400,7 @@ CREATE TABLE `users` (
   `username` varchar(50) NOT NULL DEFAULT '',
   `email` varchar(100) NOT NULL DEFAULT '',
   `password` varchar(255) DEFAULT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
   `first_name` varchar(50) DEFAULT NULL,
   `last_name` varchar(100) DEFAULT NULL,
@@ -353,16 +409,14 @@ CREATE TABLE `users` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `avatar` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES ('1', '1', 'hieu', 'hieu@coolglow.com', '$2y$10$R4ABdYQprIkqer040DYvnu7oQBJlvjDpfc6bGpVzN/Xi.7yKdRW/6', 'LjFDdeJvkZoAiqgIu0ANCN8gPxNxx9jViO8z4u3eQbCQVrHHkQqtEqgur7A6', 'Dang', 'Diep', 'Dang Diep', '1', null, '2018-04-10 03:46:21', '2018-07-24 17:46:23', 'public/users/8cfad52bcd9f5654ee236cb89ce2ce9d.png');
-INSERT INTO `users` VALUES ('10', '1', '', 'phidangmtv@gmail.com', '$2y$10$zsn9yzd87SNmUeXoBDdSiO97InBGMeuUFYJMEIHtWkIyxUNOBOZkK', 'G7m6gUNNGDTGTWuPGq3XhLDULYAV62O0DT08TzQMMSeoZ8kxHs0ZuYkKy13t', 'aa', 'bb', 'aa bb', '1', null, '2018-04-11 06:12:44', '2018-04-13 02:21:58', null);
-INSERT INTO `users` VALUES ('11', '1', '', 'hieu@coolglow.com11', '$2y$10$qf79gslvgY9DxeRNN2PFp.0yd0q0fNy5MfKgMdrJ1N4sFCs3WEWFi', null, 'aaa', 'bbb', 'aaa bbb', '1', null, '2018-06-27 04:23:42', '2018-06-27 04:23:42', null);
-INSERT INTO `users` VALUES ('12', '1', '', 'hieu@coolglow.com1122', '$2y$10$/mhePlbQvgo1lTS8nrJHUujWKTPgxPo4oFNtcrR.tag1guLPIH3nS', null, 'aaa', 'bbb', 'aaa bbb', '1', null, '2018-06-27 04:24:02', '2018-06-27 04:24:02', null);
+INSERT INTO `users` VALUES ('1', '1', 'hieu', 'hieu@coolglow.com', '$2y$10$APFP6yuSOGhGyxSpremAuOJ4Zp0JAngcXHNH9ozrwjJQ3KhnMAKHK', 'public/users/62d9b96b66228da6e45abc1664bc741e.png', 'LjFDdeJvkZoAiqgIu0ANCN8gPxNxx9jViO8z4u3eQbCQVrHHkQqtEqgur7A6', 'Dang', 'Diep', 'Dang111', '1', null, '2018-04-10 03:46:21', '2018-07-24 09:22:59');
+INSERT INTO `users` VALUES ('10', '1', '', 'phidangmtv@gmail.com', '$2y$10$zsn9yzd87SNmUeXoBDdSiO97InBGMeuUFYJMEIHtWkIyxUNOBOZkK', null, 'JvybS78nV0HDdwm4w5L1DXBZWROKl5USxnCrMGiAmjG97zXxUFZI0SigdH3h', 'aa', 'bb', 'aa bb', '1', null, '2018-04-11 06:12:44', '2018-07-24 14:20:48');
+INSERT INTO `users` VALUES ('11', '1', '', 'hieu@coolglow.com11', '$2y$10$qf79gslvgY9DxeRNN2PFp.0yd0q0fNy5MfKgMdrJ1N4sFCs3WEWFi', null, null, 'aaa', 'bbb', 'aaa bbb', '1', null, '2018-06-27 04:23:42', '2018-06-27 04:23:42');
