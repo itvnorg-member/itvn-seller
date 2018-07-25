@@ -239,3 +239,9 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+/* Note Editor */
+.note-editor{
+  border: 1px solid #e5e6e7;
+  margin-bottom: 15px
+}
