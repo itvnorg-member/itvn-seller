@@ -33,6 +33,11 @@ Class CategoryRepository
 
             }
         }, true)
+        ->addColumn('numbers', function ($category) {
+            $html = '';
+            $html .= '<a href="javascript:;">10</a>';
+            return $html;
+        })
         ->addColumn('action', function ($category) {
             $html = '';
             $html .= '<a href="' . route('admin.categories.view', ['id' => $category->id]) . '" class="btn btn-xs btn-primary" style="margin-right: 5px"><i class="glyphicon glyphicon-edit"></i> Sửa</a>';
@@ -48,7 +53,7 @@ Class CategoryRepository
             }
             return $html;
         })
-        ->rawColumns(['status', 'action'])
+        ->rawColumns(['status', 'action', 'numbers'])
         ->toJson();
 
         return $dataTable;
@@ -83,7 +88,6 @@ Class CategoryRepository
         }
 
         $model->name = $data['name'];
-        $data['parent_id'] = 0;
         if ($data['parent_id']) {
             $parent = Category::find($data['parent_id']);
         }
@@ -114,6 +118,13 @@ Class CategoryRepository
             $category->delete();
         }
 
+        return $result;
+    }
+
+    public function getCategoriesTree(){
+        $categories = Category::select(['categories.id', 'categories.name', 'categories.level', 'categories.parent_id'])->get();
+        $result = make_tree($categories);
+        
         return $result;
     }
 

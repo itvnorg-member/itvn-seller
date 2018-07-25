@@ -39,6 +39,7 @@ class CategoryController extends AdminController
             $this->_data['title'] = 'Chỉnh sửa danh mục sản phẩm';
             $this->_data['data'] = $category->getCategory($id);
         }
+        $this->_data['categoriesTree'] = option_menu($category->getCategoriesTree());
 
         $this->_pushBreadCrumbs($this->_data['title']);
         return view('admin.categories.view', $this->_data);

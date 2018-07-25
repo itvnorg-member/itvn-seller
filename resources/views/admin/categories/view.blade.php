@@ -34,6 +34,17 @@
 
                     <div class="row">
                         <div class="form-group">
+                            <label class="col-md-2 control-label">Danh mục cha</label>
+                            <div class="col-md-5">
+                                <select class="form-control m-b" name="parent_id">
+                                    {!! $categoriesTree !!}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
                             <label class="col-md-2 control-label">Mô tả</label>
                             <div class="col-md-5">
                                 <textarea name="description" id="" cols="30" rows="10"  class="form-control m-b">@if(isset($data->description)){{$data->description}}@else{{old('description')}}@endif</textarea>
