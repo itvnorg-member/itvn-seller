@@ -46,30 +46,18 @@ Class CategoryRepository
             return $html;
         })
         ->addColumn('status', function ($category) {
-            $checked = ($category->active === ACTIVE) ? 'checked' : '';
-            $html = '<label class="switch">
-            <input type="checkbox" '.$checked.' class="switch-checkbox" data-name="' . $category->name . '" data-id="'.$category->id.'">
-            <span class="slider round"></span>';
+            $active = '';
+            $disable = '';
+            if ($category->active === ACTIVE) {
+                $active  = 'checked';
+            }
+            $html = '<input type="checkbox" '.$disable.' data-name="'.$category->name.'" data-id="'.$category->id.'" name="social' . $category->active . '" class="js-switch" value="' . $category->active . '" ' . $active . ' ./>';
             return $html;
         })
         ->rawColumns(['status', 'action', 'numbers'])
         ->toJson();
 
         return $dataTable;
-    }
-
-    public function addCategory($category)
-    {
-        $categories = $this->getCategories();
-        array_push($categories, $category);
-        Cache::forever(self::CACHE_NAME_CATEGORIES, $categories);
-
-        return $category;
-    }
-
-    public function getCategories()
-    {
-        return Cache::get(self::CACHE_NAME_CATEGORIES, []);
     }
 
     public function getCategory($id)
@@ -139,23 +127,11 @@ Class CategoryRepository
         return $result;
     }
 
-    public function changeStatus($request){
-        if (trim($request->get('id')) !== "" && trim($request->get('status')) !== "") {
-            $model = Category::find($request->get('id'));
-            $model->active = $request->get('status');
-
-            $model->save();
-        }else{
-            $result['errors'][] = 'Phải truyền vào id và trạng thái của danh mục';
-            $result['success'] = false;
-        }
-
-        $result = [
-            'success' => true,
-            'errors' => []
-        ];
-
-        return $result;
+    public function changeStatus($categoryID, $status)
+    {
+        $model = Category::find($categoryID);
+        $model->active = $status;
+        return $model->save();
     }
 
     public static function resetHierarchy($id, $parent_id){

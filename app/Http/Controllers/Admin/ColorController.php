@@ -74,6 +74,10 @@ class ColorController extends AdminController
 
         $color->createOrUpdate($input, $id);
 
+        if($input['action'] === 'save') {
+            return redirect()->back()->withSuccess($message);
+        }
+
         return redirect()->route('admin.colors.index')->withSuccess($message);
     }
 
@@ -83,5 +87,17 @@ class ColorController extends AdminController
         $result = $color->delete($ids);
 
         return response()->json($result);
+    }
+
+    public function changeStatus(ColorRepository $color)
+    {
+        $colorID = $this->_request->get('id');
+        $status = $this->_request->get('status');
+        $status = filter_var($status, FILTER_VALIDATE_BOOLEAN);
+        $color->changeStatus($colorID, $status);
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 }

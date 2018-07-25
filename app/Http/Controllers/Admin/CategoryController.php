@@ -92,14 +92,15 @@ class CategoryController extends AdminController
         return response()->json($result);
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function changeStatus(CategoryRepository $category){
-        if ($this->_request->ajax()){
-            return $category->changeStatus($this->_request);
-        }
+    public function changeStatus(CategoryRepository $category)
+    {
+        $categoryID = $this->_request->get('id');
+        $status = $this->_request->get('status');
+        $status = filter_var($status, FILTER_VALIDATE_BOOLEAN);
+        $category->changeStatus($categoryID, $status);
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 }

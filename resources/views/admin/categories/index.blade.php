@@ -24,7 +24,78 @@
                 "data": function (d) {
                     d.keyword = $('#s-keyword').val();
                     d.status = $('#s-status').val();
-                }
+                },
+                    complete: function(){
+                        var inputStatus = document.querySelectorAll('.js-switch');
+                        var elems = Array.prototype.slice.call(inputStatus);
+
+                        elems.forEach(function(elem) {
+                            var switchery = new Switchery(elem, { size: 'small' });
+
+                            elem.onchange = function() {
+                                var id = $(elem).attr('data-id');
+                                var name = $(elem).attr('data-name');
+                                if (elem.checked) {
+                                    var status = 'kích hoạt';
+                                } else {
+                                    var status = 'bỏ kích hoạt';
+                                }
+
+                                swal({
+                                        title: "Cảnh Báo!",
+                                        text: "Bạn có chắc muốn "+status+" <b>"+name+"</b> ?",
+                                        html:true,
+                                        type: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonClass: "btn-danger",
+                                        confirmButtonText: "Chắc chắn!",
+                                        cancelButtonText: "Không",
+                                        closeOnConfirm: false
+                                    },
+                                    function(isConfirm){
+                                        if (isConfirm) {
+                                            $.ajax({
+                                                url: url_change_status,
+                                                type: 'PUT',
+                                                data: {
+                                                    id: id,
+                                                    status: elem.checked
+                                                },
+                                                dataType: 'json',
+                                                success: function (response) {
+                                                    if (response.success) {
+                                                        swal({
+                                                            title: "Thành công!",
+                                                            text: "Bạn đã " + status + " danh mục " + name + " thành công.",
+                                                            html: true,
+                                                            type: "success",
+                                                            confirmButtonClass: "btn-primary"
+                                                        });
+                                                    } else {
+                                                        errorHtml = '<ul class="text-left">';
+                                                        $.each(response.errors, function (key, error) {
+                                                            errorHtml += '<li>' + error + '</li>';
+                                                        });
+                                                        errorHtml += '</ul>';
+                                                        swal({
+                                                            title: "Error! Refresh page and try again.",
+                                                            text: errorHtml,
+                                                            html: true,
+                                                            type: "error",
+                                                            confirmButtonClass: "btn-danger"
+                                                        });
+                                                    }
+                                                }
+                                            });
+                                        } else {
+                                            $(elem).prop('checked', !elem.checked);
+                                            $(elem).parent().find(".switchery").trigger("click");
+                                        }
+                                    });
+                            };
+                        });
+
+                    }
             },
             columns: [
             {data: 'id'},
@@ -126,40 +197,6 @@
                 }
             });
 
-        });
-    });
-
-    $(document).on('change', '.switch-checkbox', function() {
-        var checkbox = $(this);
-        var name = $(this).attr('data-name');
-        var data = {
-            id: $(this).attr('data-id'),
-            status: (this.checked) ? 1 : 0
-        };
-        checkbox.attr("disabled", true);
-        $.ajax({
-            url: url_change_status,
-            type: 'GET',
-            data: data,
-            dataType: 'json',
-            success: function (response) {
-                if (response.success) {
-                    checkbox.removeAttr("disabled");
-                } else {
-                    errorHtml = '<ul class="text-left">';
-                    $.each(response.errors, function (key, error) {
-                        errorHtml += '<li>' + error + '</li>';
-                    });
-                    errorHtml += '</ul>';
-                    swal({
-                        title: "Error! Refresh page and try again.",
-                        text: errorHtml,
-                        html: true,
-                        type: "error",
-                        confirmButtonClass: "btn-danger"
-                    });
-                }
-            }
         });
     });
 </script>
