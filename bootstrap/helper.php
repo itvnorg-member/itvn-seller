@@ -15,7 +15,6 @@ function make_tree($array, $parent = 0){
 			$result[$value->id] = [
 				'name'	=>	$value['name'],
 				'level'	=>	$value['level'],
-				'parent_id'	=>	$value['parent_id'],
 				'children'	=>	make_tree($array, $value->id)
 			];
 		}
@@ -25,14 +24,12 @@ function make_tree($array, $parent = 0){
 
 function option_menu($array, $parent = 0, $text = "", $select = 0, $result = ''){
 	foreach ($array as $key => $value) {
-		if ($parent == $value['parent_id']) {
-			$result .= "<option value='".$key."'>".$text.$value['name']."</option>";
-			if (count($value['children']) > 0) {
-				$result .= option_menu($value['children'], $key, $text."|_", 0, $result);
-			}
-
-			unset($array[$key]);
+		$result .= "<option value='".$key."'>".$text.$value['name']."</option>";
+		if (count($value['children']) > 0) {
+			$result .= option_menu($value['children'], $key, $text."|_", 0);
 		}
+
+		unset($array[$key]);
 	}
 	return $result;
 }

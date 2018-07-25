@@ -124,7 +124,7 @@ Class CategoryRepository
     public function getCategoriesTree(){
         $categories = Category::select(['categories.id', 'categories.name', 'categories.level', 'categories.parent_id'])->get();
         $result = make_tree($categories);
-        
+
         return $result;
     }
 
