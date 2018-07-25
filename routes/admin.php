@@ -11,7 +11,7 @@ Route::prefix('thanh-vien')
     Route::post ('/them', 'UserController@store')->name('admin.users.store');
     Route::delete ('/', 'UserController@delete')->name('admin.users.delete');
 });
-    
+
 Route::get ('danh-muc-san-pham', 'CategoryController@index')->name('admin.categories.index');
 Route::get ('danh-muc-san-pham/chi-tiet', 'CategoryController@view')->name('admin.categories.view');
 Route::get ('danh-muc-san-pham/them', 'CategoryController@view')->name('admin.categories.create');
