@@ -42,14 +42,15 @@ Class ColorRepository
 			$html .= '<i class="fa fa-trash-o" aria-hidden="true"></i> Xóa</a>';
 			return $html;
 		})
-		->addColumn('status', function ($color) {
-			if ($color->active === ACTIVE) {
-				$html = '<span class="label label-primary">Đã kích hoạt</span>';
-			} else {
-				$html = '<span class="label">Chưa kích hoạt</span>';
-			}
-			return $html;
-		})
+        ->addColumn('status', function ($color) {
+            $active = '';
+            $disable = '';
+            if ($color->active === ACTIVE) {
+                $active  = 'checked';
+            }
+            $html = '<input type="checkbox" '.$disable.' data-name="'.$color->name.'" data-id="'.$color->id.'" name="social' . $color->active . '" class="js-switch" value="' . $color->active . '" ' . $active . ' ./>';
+            return $html;
+        })
 		->addColumn('code', function ($color) {
 			if (!empty($color->code)) {
 				$html = '<div class="c-code-wrapper"><div class="c-code" style="background-color: '.$color->code.';"></div><span class="c-code-name">'.$color->code.'</span></div>';
