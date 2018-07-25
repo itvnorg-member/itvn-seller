@@ -24,9 +24,14 @@ function make_tree($array, $parent = 0){
 
 function option_menu($array, $parent = 0, $text = "", $select = 0, $result = ''){
 	foreach ($array as $key => $value) {
-		$result .= "<option value='".$key."'>".$text.$value['name']."</option>";
+		if ($select != 0 && $select == $key) {
+			$result .= "<option value='".$key."' selected='selected'>".$text.$value['name']."</option>";
+		}else{
+			$result .= "<option value='".$key."'>".$text.$value['name']."</option>";
+		}
+		
 		if (count($value['children']) > 0) {
-			$result .= option_menu($value['children'], $key, $text."|_", 0);
+			$result .= option_menu($value['children'], $key, $text."|_", $select);
 		}
 
 		unset($array[$key]);

@@ -39,7 +39,7 @@ class CategoryController extends AdminController
             $this->_data['title'] = 'Chỉnh sửa danh mục sản phẩm';
             $this->_data['data'] = $category->getCategory($id);
         }
-        $this->_data['categoriesTree'] = option_menu($category->getCategoriesTree());
+        $this->_data['categoriesTree'] = option_menu($category->getCategoriesTree(), 0, "", $category->getCategory($id)->parent_id);
 
         $this->_pushBreadCrumbs($this->_data['title']);
         return view('admin.categories.view', $this->_data);
@@ -75,6 +75,10 @@ class CategoryController extends AdminController
 
         $category->createOrUpdate($input, $id);
 
+        if($input['action'] === 'save') {
+            return redirect()->back()->withSuccess($message);
+        }
+
         return redirect()->route('admin.categories.index')->withSuccess($message);
     }
 
@@ -84,5 +88,16 @@ class CategoryController extends AdminController
         $result = $category->delete($ids);
 
         return response()->json($result);
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function changeStatus(CategoryRepository $category){
+        if ($this->_request->ajax()){
+            return $category->changeStatus($this->_request);
+        }
     }
 }

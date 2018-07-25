@@ -37,6 +37,7 @@
                             <label class="col-md-2 control-label">Danh mục cha</label>
                             <div class="col-md-5">
                                 <select class="form-control m-b" name="parent_id">
+                                    <option value="0">Chọn danh mục cha</option>
                                     {!! $categoriesTree !!}
                                 </select>
                             </div>
@@ -83,9 +84,10 @@
                     </div>
 
                     <div class="text-right">
-                        <a href="{{route('admin.categories.index')}}" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Back to List</a>
-                        <button type="button" class="btn btn-default" id="bt-reset"><i class="fa fa-refresh"></i> Reset</button>
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
+                        <a href="{{route('admin.categories.index')}}" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Trở lại</a>
+                        <button type="button" class="btn btn-default" id="bt-reset"><i class="fa fa-refresh"></i> Làm mới</button>
+                        <button type="submit" name="action" class="btn btn-primary" value="save"><i class="fa fa-save"></i> Lưu</button>
+                        <button type="submit" name="action" class="btn btn-warning" value="save_quit"><i class="fa fa-save"></i> Lưu &amp; Thoát</button>
                     </div>
                 </div>
             </form>

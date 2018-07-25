@@ -46,11 +46,10 @@ Class CategoryRepository
             return $html;
         })
         ->addColumn('status', function ($category) {
-            if ($category->active === ACTIVE) {
-                $html = '<span class="label label-primary">Đã kích hoạt</span>';
-            } else {
-                $html = '<span class="label">Chưa kích hoạt</span>';
-            }
+            $checked = ($category->active === ACTIVE) ? 'checked' : '';
+            $html = '<label class="switch">
+            <input type="checkbox" '.$checked.' class="switch-checkbox" data-name="' . $category->name . '" data-id="'.$category->id.'">
+            <span class="slider round"></span>';
             return $html;
         })
         ->rawColumns(['status', 'action', 'numbers'])
@@ -83,6 +82,7 @@ Class CategoryRepository
     {
         if ($id) {
             $model = Category::find($id);
+            $old_level = $model->level;
         } else {
             $model = new Category;
         }
@@ -98,6 +98,11 @@ Class CategoryRepository
         $model->order = $data['order'];
 
         $model->save();
+
+        // Check if have old level then reset categories hyerarchy
+        if (isset($old_level) && $old_level != $model->level) {
+            CategoryRepository::resetHierarchy($id, $id);
+        }
 
         return $model;
     }
@@ -115,6 +120,12 @@ Class CategoryRepository
                 $result['success'] = false;
                 continue;
             }
+
+            // Check category has products or not
+
+            // Reset level and parent for children categories
+            CategoryRepository::resetHierarchy($id, $category->parent_id);
+
             $category->delete();
         }
 
@@ -126,6 +137,40 @@ Class CategoryRepository
         $result = make_tree($categories);
 
         return $result;
+    }
+
+    public function changeStatus($request){
+        if (trim($request->get('id')) !== "" && trim($request->get('status')) !== "") {
+            $model = Category::find($request->get('id'));
+            $model->active = $request->get('status');
+
+            $model->save();
+        }else{
+            $result['errors'][] = 'Phải truyền vào id và trạng thái của danh mục';
+            $result['success'] = false;
+        }
+
+        $result = [
+            'success' => true,
+            'errors' => []
+        ];
+
+        return $result;
+    }
+
+    public static function resetHierarchy($id, $parent_id){
+        $children = Category::select(['categories.id', 'categories.level', 'categories.active'])->where('categories.parent_id', $id)->get();
+        if (count($children) > 0) {
+            $parent = Category::find($parent_id);
+            foreach ($children as $child) {
+                $child->parent_id = $parent_id;
+                $child->level = $parent->level + 1;
+
+                $child->save();
+
+                CategoryRepository::resetHierarchy($child->id, $child->parent_id);
+            }
+        }
     }
 
 }

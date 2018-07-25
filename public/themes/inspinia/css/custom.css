@@ -72,16 +72,17 @@ body{
 }
 
 .nav > li.active{
-   background-color: #FFF;
-   color: #293846;
-   border-left: none;
+ background-color: #FFF;
+ color: #293846;
+ border-left: none;
 }
-
+.btn-lg, .btn-group-lg>.btn{
+    font-size: 14px;
+}
 .nav .nav-item a > .nav-label{
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 400;
-
 }
 
 .nav .nav-item a > i{
@@ -130,20 +131,95 @@ ul.nav-second-level{
     padding-left: 15px;
 }
 
-.mr-15{
-    margin-right: 15px;
-}
-
 .arrow{
     margin-top: 5px;
 }
 
-.c-ratio-color{
-    width: 20px;
+@media (min-width: 768px){
+    .lead, .lead b {
+        font-size: 16px;
+    }
 }
-
-.lbl-ratio{
-    margin-top: -10px;
+.switchery > small {
+    background: #fff;
+    border-radius: 100%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    height: 22px;
+    position: absolute;
+    top: 0;
+    width: 22px;
 }
-
+.switchery {
+    background-color: #fff;
+    border: 1px solid #dfdfdf;
+    border-radius: 20px;
+    cursor: pointer;
+    display: inline-block;
+    height: 22px;
+    position: relative;
+    vertical-align: middle;
+    width: 40px;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
 /* END: Style for Layout */
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 17px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 17px;
+  width: 17px;
+  left: -0px;
+  bottom: 0px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #18a689;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #18a689;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(18px);
+  -ms-transform: translateX(18px);
+  transform: translateX(18px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
