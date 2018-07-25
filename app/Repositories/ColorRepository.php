@@ -33,15 +33,15 @@ Class ColorRepository
 
 			}
 		}, true)
-		->addColumn('action', function ($Color) {
+		->addColumn('action', function ($color) {
 			$html = '';
-			$html .= '<a href="' . route('admin.colors.view', ['id' => $Color->id]) . '" class="btn btn-xs btn-primary" style="margin-right: 5px"><i class="glyphicon glyphicon-edit"></i> Sửa</a>';
-			$html .= '<a href="#" class="bt-delete btn btn-xs btn-danger" data-id="' . $Color->id . '" data-name="' . $Color->name . '">';
+			$html .= '<a href="' . route('admin.colors.view', ['id' => $color->id]) . '" class="btn btn-xs btn-primary" style="margin-right: 5px"><i class="glyphicon glyphicon-edit"></i> Sửa</a>';
+			$html .= '<a href="#" class="bt-delete btn btn-xs btn-danger" data-id="' . $color->id . '" data-name="' . $color->name . '">';
 			$html .= '<i class="fa fa-trash-o" aria-hidden="true"></i> Xóa</a>';
 			return $html;
 		})
-		->addColumn('status', function ($Color) {
-			if ($Color->active === ACTIVE) {
+		->addColumn('status', function ($color) {
+			if ($color->active === ACTIVE) {
 				$html = '<span class="label label-primary">Đã kích hoạt</span>';
 			} else {
 				$html = '<span class="label">Chưa kích hoạt</span>';

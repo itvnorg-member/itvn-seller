@@ -1,4 +1,3 @@
-<!-- PHuoc chich -->
 @extends('admin.layouts.inspinia.master')
 
 @section('title', $title)
@@ -147,8 +146,8 @@
                     <label>Chọn trạng thái</label>
                     <select class="form-control" name="status" id="s-status">
                         <option value=""> -- Tất cả -- </option>
-                        <option @if(app('request')->has('status') && app('request')->input('status') == ACTIVE) selected @endif value="{{ACTIVE}}">Active</option>
-                        <option @if(app('request')->has('status') && app('request')->input('status') == INACTIVE) selected @endif value="{{INACTIVE}}">Inactive</option>
+                        <option @if(app('request')->has('status') && app('request')->input('status') == ACTIVE) selected @endif value="{{ACTIVE}}">Đã kích hoạt</option>
+                        <option @if(app('request')->has('status') && app('request')->input('status') == INACTIVE) selected @endif value="{{INACTIVE}}">Chưa kích hoạt</option>
                     </select>
                 </div>
             </div>
