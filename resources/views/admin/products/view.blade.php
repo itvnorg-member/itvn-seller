@@ -5,7 +5,7 @@
 @section('js')
     <!-- Page-Level Scripts -->
     <script>
-        function myDeleteFunction(elRow) {
+        function deleteProductInfoItem(elRow) {
             var tblRow = elRow.closest('tr');
             if (tblRow !== null) {
                 tblRow.remove();
@@ -52,7 +52,7 @@
             var index = 0;
             $('.c-add-info').click(function(){
                 if (elColorVal != "" && elSizeVal != "" && elQuantityVal != "") {
-                    $('#i-product-info tbody').append('<tr class="child '+index+'"><td><a class="'+index+'" href="javascript:;" onclick="myDeleteFunction(this);">Delete</a></td><td>'+elColorVal+'</td><td>'+elSizeVal+'</td><td>'+elQuantityVal+'</td></tr>');
+                    $('#i-product-info tbody').append('<tr class="child '+index+'"><td><a class="'+index+'" href="javascript:;" onclick="deleteProductInfoItem(this);">Delete</a></td><td>'+elColorVal+'</td><td>'+elSizeVal+'</td><td>'+elQuantityVal+'</td></tr>');
                     index++;
                     resetVal();
                 }else{
