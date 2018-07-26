@@ -69,7 +69,8 @@
                                                             text: "Bạn đã " + status + " danh mục " + name + " thành công.",
                                                             html: true,
                                                             type: "success",
-                                                            confirmButtonClass: "btn-primary"
+                                                            confirmButtonClass: "btn-primary",
+                                                            confirmButtonText: "Đóng lại."
                                                         });
                                                     } else {
                                                         errorHtml = '<ul class="text-left">';
@@ -177,7 +178,8 @@
                             text: "Danh mục " + name + " đã bị xóa.",
                             html: true,
                             type: "success",
-                            confirmButtonClass: "btn-primary"
+                            confirmButtonClass: "btn-primary",
+                            confirmButtonText: "Đóng lại."
                         });
                     } else {
                         errorHtml = '<ul class="text-left">';
@@ -220,10 +222,10 @@
                     <select class="form-control" name="status" id="s-status">
                         <option value=""> -- Tất cả --</option>
                         <option @if(app('request')->has('status') && app('request')->input('status') == ACTIVE) selected
-                            @endif value="{{ACTIVE}}">Active
+                            @endif value="{{ACTIVE}}">Đã kích hoạt
                         </option>
                         <option @if(app('request')->has('status') && app('request')->input('status') == INACTIVE) selected
-                            @endif value="{{INACTIVE}}">Inactive
+                            @endif value="{{INACTIVE}}">Chưa kích hoạt
                         </option>
                     </select>
                 </div>
@@ -236,7 +238,7 @@
                     </button>
                     <button class="btn btn-sm btn-default" type="button" id="bt-reset"
                     style="margin-bottom: 0;margin-top: 22px; margin-right:5px">
-                    <i class="fa fa-refresh"></i> Clear
+                    <i class="fa fa-refresh"></i> Làm mới
                 </button>
             </div>
 

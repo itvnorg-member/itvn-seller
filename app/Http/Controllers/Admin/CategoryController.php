@@ -58,6 +58,7 @@ class CategoryController extends AdminController
 
         $rules = [
             'name' => 'required|string|max:50',
+            'description' => 'required',
             'active' => 'required'
         ];
         $message = 'Danh mục sản phẩm đã được tạo.';
@@ -75,10 +76,10 @@ class CategoryController extends AdminController
                 ->withInput();
         }
 
-        $category->createOrUpdate($input, $id);
+        $data = $category->createOrUpdate($input, $id);
 
         if($input['action'] === 'save') {
-            return redirect()->back()->withSuccess($message);
+            return redirect()->route('admin.categories.view', ['id' => $data->id])->withSuccess($message);
         }
 
         return redirect()->route('admin.categories.index')->withSuccess($message);

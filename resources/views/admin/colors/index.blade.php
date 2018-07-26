@@ -69,7 +69,8 @@
                                                     text: "Bạn đã " + status + " danh mục " + name + " thành công.",
                                                     html: true,
                                                     type: "success",
-                                                    confirmButtonClass: "btn-primary"
+                                                    confirmButtonClass: "btn-primary",
+                                                    confirmButtonText: "Đóng lại."
                                                 });
                                             } else {
                                                 errorHtml = '<ul class="text-left">';
@@ -177,7 +178,8 @@ $("#dataTables").on("click", '.bt-delete', function(){
                         text: "Màu sắc " + name + " đã bị xóa.",
                         html: true,
                         type: "success",
-                        confirmButtonClass: "btn-primary"
+                        confirmButtonClass: "btn-primary",
+                        confirmButtonText: "Đóng lại."
                     });
                 } else {
                     errorHtml = '<ul class="text-left">';
@@ -230,7 +232,7 @@ $("#dataTables").on("click", '.bt-delete', function(){
                         <i class="fa fa-search"></i> Tìm kiếm
                     </button>
                     <button class="btn btn-sm btn-default" type="button" id="bt-reset" style="margin-bottom: 0;margin-top: 22px; margin-right:5px">
-                        <i class="fa fa-refresh"></i> Clear
+                        <i class="fa fa-refresh"></i> Làm mới
                     </button>
                 </div>
 

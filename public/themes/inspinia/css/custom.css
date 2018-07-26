@@ -240,6 +240,10 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+.sweet-alert .sa-icon.sa-success::before, .sweet-alert .sa-icon.sa-success::after {
+    height: 110px;
+}
+
 /* Note Editor */
 .note-editor{
   border: 1px solid #e5e6e7;

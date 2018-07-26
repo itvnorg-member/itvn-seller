@@ -24,8 +24,6 @@
 
     <link href="{{asset('/themes/inspinia/css/plugins/switchery/switchery.css')}}" rel="stylesheet" />
     <link href="{{asset('themes/inspinia/css/animate.css')}}" rel="stylesheet">
-    <link href="{{asset('themes/inspinia/css/plugins/summernote/summernote.css')}}" rel="stylesheet">
-
     <link href="{{asset('themes/inspinia/css/style.css')}}" rel="stylesheet">
     <link href="{{asset('themes/inspinia/css/custom.css')}}" rel="stylesheet">
     @yield('css')
@@ -111,7 +109,8 @@
 <script src="{{asset('themes/inspinia/js/plugins/toastr/toastr.min.js')}}"></script>
 <script src="{{asset('themes/inspinia/js/plugins/validate/jquery.validate.min.js')}}"></script>
 <script src="{{asset('themes/inspinia/js/plugins/colorpicker/bootstrap-colorpicker.min.js')}}"></script>
-<script src="{{asset('themes/inspinia/js/plugins/summernote/summernote.min.js')}}"></script>
+<script src="{{asset('themes/inspinia/js/plugins/cleave/cleave.min.js')}}"></script>
+<script src="{{asset('themes/inspinia/js/plugins/cleave/cleave-phone.i18n.js')}}"></script>
 
 <script src="{{asset('themes/inspinia/js/plugins/switchery/switchery.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
