@@ -5,12 +5,63 @@
 @section('js')
     <!-- Page-Level Scripts -->
     <script>
+        function myDeleteFunction(elRow) {
+            var tblRow = elRow.closest('tr');
+            if (tblRow !== null) {
+                tblRow.remove();
+            }
+        }
+
         $(document).ready(function () {
             $("#bt-reset").click(function () {
                 $("#mainForm")[0].reset();
             })
 
+            //---> Init summer note
             $('.summernote').summernote();
+
+            //---> Add row for table
+            var elColorVal = "";
+            var elSizeVal = "";
+            var elQuantityVal = "";
+
+            function resetVal(){
+                $("#i-color-selection").val("");
+                $("#i-size-selection").val("");
+                $("#i-quantity-input").val("");
+                elColorVal = "";
+                elSizeVal = "";
+                elQuantityVal = "";
+            }
+
+            $("#i-color-selection").change(function(){
+                elColorVal = $(this).val();
+                console.log(elColorVal);
+            });
+
+            $("#i-size-selection").change(function(){
+                elSizeVal = $(this).val();
+                console.log(elSizeVal);
+            });
+
+            $("#i-quantity-input").change(function(){
+                elQuantityVal = $(this).val();
+                console.log(elQuantityVal);
+            });
+            
+            var index = 0;
+            $('.c-add-info').click(function(){
+                if (elColorVal != "" && elSizeVal != "" && elQuantityVal != "") {
+                    $('#i-product-info tbody').append('<tr class="child '+index+'"><td><a class="'+index+'" href="javascript:;" onclick="myDeleteFunction(this);">Delete</a></td><td>'+elColorVal+'</td><td>'+elSizeVal+'</td><td>'+elQuantityVal+'</td></tr>');
+                    index++;
+                    resetVal();
+                }else{
+                    alert("Nhập sai rồi Phước ơi");
+                }
+            });
+
+
+            
         });
     </script>
 @endsection
@@ -33,6 +84,26 @@
                                 <div class="col-md-5">
                                     <input type="text" name="name" placeholder="" class="form-control m-b"
                                            value="@if(isset($data->name)){{$data->name}}@else{{old('name')}}@endif"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Mã sản phẩm</label>
+                                <div class="col-md-5">
+                                    <input type="text" name="code" placeholder="" class="form-control m-b"
+                                           value="@if(isset($data->code)){{$data->code}}@else{{old('code')}}@endif"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Số lượng</label>
+                                <div class="col-md-5">
+                                    <input disabled type="text" name="quantity" placeholder="0" class="form-control m-b"
+                                           value="@if(isset($data->quantity)){{$data->quantity}}@else{{old('quantity')}}@endif"/>
                                 </div>
                             </div>
                         </div>
@@ -67,17 +138,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">Số lượng</label>
-                                <div class="col-md-5">
-                                    <input type="text" name="quantity" placeholder="" class="form-control m-b"
-                                           value="@if(isset($data->quantity)){{$data->quantity}}@else{{old('quantity')}}@endif"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
+                        <div class="row hidden">
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Kích thước</label>
                                 <div class="col-md-5">
@@ -124,7 +185,7 @@
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Trạng thái</label>
                                 <div class="col-md-3">
-                                    <select class="form-control" name="active">
+                                    <select class="form-control m-b" name="active">
                                         <option @if(isset($data->active) && $data->active === ACTIVE || old('active') === ACTIVE) selected
                                                 @endif value="{{ACTIVE}}">Đã kích hoạt
                                         </option>
@@ -132,6 +193,54 @@
                                                 @endif value="{{INACTIVE}}">Chưa kích hoạt
                                         </option>
                                     </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-success pull-right c-add-info">Thêm</button>
+                                </div>
+                                <div class="col-md-2">
+                                    <select name="color" id="i-color-selection" class="form-control">
+                                        <option value="" disabled selected>-- Chọn màu --</option>
+                                        <option value="Đỏ">Đỏ</option>
+                                        <option value="Trắng">Trắng</option>
+                                        <option value="Vàng">Vàng</option>
+                                        <option value="Hồng">Hồng</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <select name="sizes" id="i-size-selection" class="form-control">
+                                        <option value="" disabled selected>-- Chọn kích thước --</option>
+                                        <option value="Lớn">Lớn</option>
+                                        <option value="Nhỏ">Nhỏ</option>
+                                        <option value="Vừa">Vừa</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <input id="i-quantity-input" type="text" name="quantity" placeholder="0" class="form-control m-b"
+                                           value=""/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-6">
+                                    <table id="i-product-info" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Màu sắc</th>
+                                                <th>Kích thước</th>
+                                                <th>Số lượng</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
