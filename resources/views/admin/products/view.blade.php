@@ -9,7 +9,26 @@
             var tblRow = elRow.closest('tr');
             if (tblRow !== null) {
                 tblRow.remove();
+                calculateQuantity();
             }
+        }
+
+        var sum = 0;
+        function calculateQuantity(){
+            // iterate through each td based on class and add the values
+            $(".c-quantity").each(function() {
+
+                var value = $(this).text();
+                // add only if the value is number
+                if(!isNaN(value) && value.length != 0) {
+                    sum += parseFloat(value);
+                }
+
+            });
+            console.log(sum);
+            $('.c-total-quantities').text(sum);
+            $('.c-quatity-input').val(sum);
+            sum = 0;
         }
 
         $(document).ready(function () {
@@ -52,7 +71,8 @@
             var index = 0;
             $('.c-add-info').click(function(){
                 if (elColorVal != "" && elSizeVal != "" && elQuantityVal != "") {
-                    $('#i-product-info tbody').append('<tr class="child '+index+'"><td><a class="'+index+'" href="javascript:;" onclick="deleteProductInfoItem(this);">Delete</a></td><td>'+elColorVal+'</td><td>'+elSizeVal+'</td><td>'+elQuantityVal+'</td></tr>');
+                    $('#i-product-info tbody').prepend('<tr class="child '+index+'"><td><a class="'+index+'" href="javascript:;" onclick="deleteProductInfoItem(this);">Delete</a></td><td>'+elColorVal+'</td><td>'+elSizeVal+'</td><td class="c-quantity">'+elQuantityVal+'</td></tr>');
+                    calculateQuantity();
                     index++;
                     resetVal();
                 }else{
@@ -60,7 +80,7 @@
                 }
             });
 
-
+            $('.c-total-quantities').text(sum);
             
         });
     </script>
@@ -102,7 +122,7 @@
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Số lượng</label>
                                 <div class="col-md-5">
-                                    <input disabled type="text" name="quantity" placeholder="0" class="form-control m-b"
+                                    <input disabled type="text" name="quantity" placeholder="0" class="form-control m-b c-quatity-input"
                                            value="@if(isset($data->quantity)){{$data->quantity}}@else{{old('quantity')}}@endif"/>
                                 </div>
                             </div>
@@ -239,6 +259,12 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>Tổng số lượng: <span class="c-total-quantities"></span></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
