@@ -52,6 +52,7 @@ class ColorController extends AdminController
     {
         $input = $this->_request->all();
         $id = $input['id'] ?? null;
+        // dd($input['photo']);
 
         $rules = [
             'name' => 'required|string|max:50|unique:colors,name',
@@ -71,10 +72,6 @@ class ColorController extends AdminController
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
-        }
-
-        if ($input['color'] == 'photo') {
-            $rules['photo'] = 'required';
         }
 
         if ($input['color'] == 'code') {

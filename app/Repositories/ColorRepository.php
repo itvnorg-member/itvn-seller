@@ -97,10 +97,6 @@ Class ColorRepository
             }
             $upload = new Photo($data['photo']);
             $model->photo = $upload->uploadTo('colors');
-            $model->code = "";
-        }else{
-        	$model->code = $data['code'];
-        	$model->photo = "";
         }
 
 		$model->save();
