@@ -99,7 +99,7 @@
                 @if (isset($data->id))
                 <input type="hidden" name="id" value="{{$data->id}}"/>
                 @endif
-                <input type="hidden" name="categories" value="{{$categories}}"/>
+                <input type="hidden" name="categories" value="@if(isset($categories)){{$categories}}@endif"/>
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-md-8">
