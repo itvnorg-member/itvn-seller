@@ -39,17 +39,25 @@ function option_menu($array, $text = "", $select = 0, $result = ''){
 	return $result;
 }
 
-function make_list_hierarchy($array, $result = ''){
-	$result .= '<ul>';
+function make_list_hierarchy($array, $checked = array(), $result = ''){
+	$result .= '<ul class="list-tree">';
 	foreach ($array as $key => $value) {
-		$result .= '<li>
-		<div class="checkbox">
-		<label><input type="checkbox" value="'.$key.'">'.$value['name'].'</label>
-		</div>
-		</li>';
+		if (array_key_exists($key, $checked)) {
+			$result .= '<li class="list-tree-item">
+			<div class="checkbox">
+			<label><input type="checkbox" value="'.$key.'" checked>'.$value['name'].'</label>
+			</div>
+			</li>';
+		}else{
+			$result .= '<li class="list-tree-item">
+			<div class="checkbox">
+			<label><input type="checkbox" value="'.$key.'">'.$value['name'].'</label>
+			</div>
+			</li>';
+		}
 		
 		if (count($value['children']) > 0) {
-			$result .= make_list_hierarchy($value['children']);
+			$result .= make_list_hierarchy($value['children'], $checked);
 		}
 
 		unset($array[$key]);
@@ -61,4 +69,11 @@ function make_list_hierarchy($array, $result = ''){
 function format_price($price)
 {
 	return number_format($price) . ' VND';
+}
+function list_ids($array){
+	$return = array();
+	foreach ($array as $key => $value) {
+		$return[$value['id']] = $value['name'];
+	}
+	return $return;
 }

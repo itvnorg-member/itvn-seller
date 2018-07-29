@@ -241,7 +241,7 @@ input:checked + .slider:before {
 }
 
 .sweet-alert .sa-icon.sa-success::before, .sweet-alert .sa-icon.sa-success::after {
-    height: 110px;
+  height: 110px;
 }
 
 /* Note Editor */
@@ -256,4 +256,24 @@ input:checked + .slider:before {
 
 .sweet-alert{
   z-index: 99999;
+}
+
+/* List tree CSS */
+.list-tree{
+  padding-left: 20px;
+  list-style-type: none;
+}
+
+.list-tree-item{
+
+}
+
+.list-tree-item .checkbox{
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.list-tree-section {
+    padding: 5px 0px;
+    border: 1px solid #eee;
 }

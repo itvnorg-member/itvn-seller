@@ -129,4 +129,16 @@ Class ProductRepository
         $model->active = $status;
         return $model->save();
     }
+
+    public function categories($id){
+    	$model = Product::find($id);
+    	$categories = $model->categories;
+        return $categories;
+    }
+
+    public function idCategories($id){
+    	$categories = $this->categories($id);
+        $idCategories = list_ids($categories);
+        return $idCategories;
+    }
 }

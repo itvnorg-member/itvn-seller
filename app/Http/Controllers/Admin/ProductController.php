@@ -36,12 +36,14 @@ class ProductController extends AdminController
     {
         $id = $this->_request->get('id');
         $this->_data['title'] = 'Tạo mới Sản phẩm';
+        $categories = array();
         if ($id) {
             $this->_data['title'] = 'Chỉnh sửa Sản phẩm';
             $this->_data['data'] = $product->getProduct($id);
+            $this->_data['categories'] = $product->idCategories($id);
         }
 
-        $this->_data['categoriesTree'] = make_list_hierarchy($category->getCategoriesTree());
+        $this->_data['categoriesTree'] = make_list_hierarchy($category->getCategoriesTree(), $this->_data['categories']);
 
         $this->_pushBreadCrumbs($this->_data['title']);
         return view('admin.products.view', $this->_data);
@@ -70,10 +72,10 @@ class ProductController extends AdminController
 
         $validator = Validator::make($input, $rules);
         if ($validator->fails()) {
-            
+
             return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+            ->withErrors($validator)
+            ->withInput();
         }
 
         $product->createOrUpdate($input, $id);
