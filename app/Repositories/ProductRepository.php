@@ -96,7 +96,12 @@ Class ProductRepository
 		$model->order = $data['order'];
 		$model->description = $data['description'];
 		$model->quantity = $data['quantity'];
-		$model->brand_id = $data['brand'];
+		$model->brand_id = $data['brand_id'];
+		$model->content = $data['content'];
+		$model->code = $data['code'];
+		$model->barcode = $data['barcode'];
+		$model->price = $data['price'];
+		$model->sell_price = $data['sell_price'];
 		if(isset($data['photo'])) {
 
 			if ($model->photo) {

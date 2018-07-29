@@ -6,7 +6,7 @@
 <!-- Page-Level Scripts -->
 <script>
 
-    var details =  jQuery.parseJSON($('input[name="details"]').val());
+    var details = ($('input[name="details"]').val()) ? jQuery.parseJSON($('input[name="details"]').val()) : [];
 
     function print_table_details(arr_details){
         var sum = 0;
@@ -66,6 +66,16 @@
             alert("Your browser doesn't support to File API")
         }
     }
+
+    var upload = document.getElementById("product_photos");
+
+    upload.onchange = function(e) {
+        var files = e.target.files;
+        var firstFile = files.item(1); 
+        var idstokeep = [0, 2];
+        var _files = Array.prototype.slice.call(files).splice(idstokeep[0], idstokeep[1]);
+        console.log(files);
+    };
 
     $(document).ready(function () {
         $( "#mainForm" ).submit(function( event ) {
@@ -154,15 +164,13 @@
                                                     <div class="form-group">
                                                         <label class="col-md-3 control-label">Thương hiệu</label>
                                                         <div class="col-md-9">
-                                                            <select id="i-size-selection" class="form-control m-b" name="brand">
+                                                            <select name="brand_id" class="form-control m-b">
                                                                 <option value="" disabled selected>-- Chọn thương hiệu --</option>
                                                                 {!! $brand_options !!}
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                        
 
                                                 <div class="row">
                                                     <div class="form-group">
@@ -207,7 +215,7 @@
                                                     <div class="form-group">
                                                         <label class="col-md-3 control-label">Nội dung</label>
                                                         <div class="col-md-9">
-                                                            <div class="summernote form-control m-b">@if(isset($data->content)){{$data->content}}@else{{old('content')}}@endif</div>
+                                                            <textarea name="content" id="" cols="30" rows="10"  class="summernote form-control m-b">@if(isset($data->content)){{$data->content}}@else{{old('content')}}@endif</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -322,9 +330,29 @@
                                 <div id="tab-4" class="tab-pane">
                                     <div class="panel-body">
                                         <div class="collection-photos">
-                                            <input class="c-mutiple-input" name="product_photos[]" type="file" accept="image/*" multiple value="" />
+                                            <input class="c-mutiple-input" id="product_photos" name="product_photos[]" type="file" accept="image/*" multiple value="" />
                                             <div class="row">
                                                 <div class="col-md-12 c-gallery-preview"></div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group">
+                                                    <div class="col-md-9">
+                                                        <table id="i-product-photos" class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th>Hình</th>
+                                                                    <th>Màu</th>
+                                                                    <th>Tên</th>
+                                                                    <th>Số thứ tự</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
