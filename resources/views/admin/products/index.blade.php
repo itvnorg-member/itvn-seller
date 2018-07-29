@@ -102,14 +102,19 @@
             {data: 'id'},
             {data: 'photo'},
             {data: 'name'},
-            {data: 'created_at'},
+            {data: 'code'},
+            {data: 'category'},
+            {data: 'quantity_available'},
+            {data: 'price'},
+            {data: 'sizes'},
+            {data: 'sell_price'},
             {data: 'status'},
             {data: 'action'}
             ],
             "aoColumnDefs": [
                     // Column index begins at 0
-                    { "sClass": "text-center", "aTargets": [ 4 ] },
-                    { "sClass": "text-right", "aTargets": [ 5 ] }
+                    { "sClass": "text-center", "aTargets": [ 8 ] },
+                    { "sClass": "text-right", "aTargets": [ 9 ] }
                     ],
                     "language": {
                         "decimal": "",
@@ -253,8 +258,13 @@ $("#dataTables").on("click", '.bt-delete', function(){
                     <tr>
                         <th>ID</th>
                         <th>Hình ảnh</th>
-                        <th>Tên</th>
-                        <th>Ngày Tạo</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Mã sản phẩm</th>
+                        <th>Danh mục</th>
+                        <th>Số lượng tồn</th>
+                        <th>Giá bán</th>
+                        <th>Size</th>
+                        <th>Giá bán buôn</th>
                         <th>Trạng Thái</th>
                         <th></th>
                     </tr>

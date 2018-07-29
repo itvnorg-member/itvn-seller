@@ -6,37 +6,62 @@
 <!-- Page-Level Scripts -->
 <script>
 
-    function deleteProductInfoItem(elRow) {
-        var tblRow = elRow.closest('tr');
-        if (tblRow !== null) {
-            tblRow.remove();
-            calculateQuantity();
-        }
+    var details =  jQuery.parseJSON($('input[name="details"]').val());
+
+    function print_table_details(arr_details){
+        var sum = 0;
+        var html = '';
+        $.each(arr_details, function(key, value){
+            html += '<tr class="child" data-index="'+key+'"><td><a href="javascript:;" onclick="deleteProductInfoItem('+key+');">Delete</a></td><td>'+value['color']['name']+'</td><td>'+value['size']['name']+'</td><td class="c-quantity">'+value['quantity']+'</td></tr>';
+            sum += parseInt(value['quantity']);
+        });
+        html += '<tr><td></td><td></td><td></td><td>Tổng số lượng: <span class="c-total-quantities">'+sum+'</span></td></tr>';
+        $('#i-product-info tbody').html(html);
+
+        $('input[name="details"]').val(JSON.stringify(details));
+        $('input[name="quantity"]').val(sum);
+
     }
+
+    function deleteProductInfoItem(key) {
+        details.splice( $.inArray(key, details), 1 );
+        print_table_details(details);
+    }
+
+    // When button add details is clicked
+    $('#add_details').click(function(){
+        details.push({
+            'color':{'id':$("#i-color-selection").val(),'name':$("#i-color-selection option[value='"+$("#i-color-selection").val()+"']").text()},
+            'size':{'id':$("#i-size-selection").val(),'name':$("#i-size-selection option[value='"+$("#i-size-selection").val()+"']").text()},
+            'quantity':$("#i-quantity-input").val()
+        });
+
+        print_table_details(details);
+    });
 
     function uploadMultipleImages(){
         if (window.File && window.FileList && window.FileReader) {
             $(".c-mutiple-input").on("change", function(e) {
-                  var files = e.target.files,
-                  filesLength = files.length;
-                  for (var i = 0; i < filesLength; i++) {
-                    var f = files[i]
-                    var fileReader = new FileReader();
-                    fileReader.onload = (function(e) {
-                        var file = e.target;
-                        $("<span class=\"pip\">" +
+              var files = e.target.files,
+              filesLength = files.length;
+              for (var i = 0; i < filesLength; i++) {
+                var f = files[i]
+                var fileReader = new FileReader();
+                fileReader.onload = (function(e) {
+                    var file = e.target;
+                    $("<span class=\"pip\">" +
                         "<span class='img-wrapper'><img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/></span>" +
                         "<span class=\"btn btn-outline btn-danger remove\">Remove image</span>" +
                         "</span>").appendTo(".c-gallery-preview");
-                        $(".remove").click(function(){
-                            $(this).parent(".pip").remove();
+                    $(".remove").click(function(){
+                        $(this).parent(".pip").remove();
                             // $('.c-mutiple-input').val();
                         });
 
-                    });
-                    fileReader.readAsDataURL(f);
-                }
-            });
+                });
+                fileReader.readAsDataURL(f);
+            }
+        });
         } else {
             alert("Your browser doesn't support to File API")
         }
@@ -52,7 +77,7 @@
 
         $("#bt-reset").click(function () {
             $("#mainForm")[0].reset();
-        })
+        });
 
         $("#mainForm").validate();
 
@@ -60,35 +85,8 @@
         $('.summernote').summernote();
 
         //---> build table details
-
-        var details = [];
-        var index = 0;
-
-        // When button add details is clicked
-        $('#add_details').click(function(){
-            details[index] = {
-                'color':{'id':$("#i-color-selection").val(),'name':$("#i-color-selection option[value='"+$("#i-color-selection").val()+"']").text()},
-                'size':{'id':$("#i-size-selection").val(),'name':$("#i-size-selection option[value='"+$("#i-size-selection").val()+"']").text()},
-                'quantity':$("#i-quantity-input").val()
-            };
-            index++;
-
-            print_table_details(details);
-            $('input[name="details"]').val(JSON.stringify(details));
-
-        });
-
-        function print_table_details(arr_details){
-            var sum = 0;
-            var html = '';
-            $.each(arr_details, function(key, value){
-                html += '<tr class="child" data-index="'+key+'"><td><a href="javascript:;" onclick="deleteProductInfoItem(this);">Delete</a></td><td>'+value['color']['name']+'</td><td>'+value['size']['name']+'</td><td class="c-quantity">'+value['quantity']+'</td></tr>';
-                sum += parseInt(value['quantity']);
-            });
-            html += '<tr><td></td><td></td><td></td><td>Tổng số lượng: <span class="c-total-quantities">'+sum+'</span></td></tr>';
-            $('#i-product-info tbody').html(html);
-        }
         
+        print_table_details(details);
         uploadMultipleImages();
 
     });
@@ -146,7 +144,7 @@
                                                     <div class="form-group">
                                                         <label class="col-md-3 control-label">Số lượng</label>
                                                         <div class="col-md-9">
-                                                            <input disabled type="text" name="quantity" placeholder="0" class="form-control m-b c-quatity-input"
+                                                            <input readonly type="text" name="quantity" placeholder="0" class="form-control m-b c-quatity-input"
                                                             value="@if(isset($data->quantity)){{$data->quantity}}@else{{old('quantity')}}@endif"/>
                                                         </div>
                                                     </div>
@@ -247,19 +245,19 @@
                                                             <button type="button" class="btn btn-success pull-right c-add-info" id="add_details">Thêm</button>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <select name="color" id="i-color-selection" class="form-control">
+                                                            <select id="i-color-selection" class="form-control">
                                                                 <option value="" disabled selected>-- Chọn màu --</option>
                                                                 {!! $color_options !!}
                                                             </select>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <select name="sizes" id="i-size-selection" class="form-control">
+                                                            <select id="i-size-selection" class="form-control">
                                                                 <option value="" disabled selected>-- Chọn kích thước --</option>
                                                                 {!! $size_options !!}
                                                             </select>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <input id="i-quantity-input" type="text" name="quantity" placeholder="0" class="form-control m-b"
+                                                            <input id="i-quantity-input" type="text" placeholder="0" class="form-control m-b"
                                                             value=""/>
                                                         </div>
                                                     </div>
@@ -278,15 +276,6 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    @foreach($details as $detail)
-                                                                    <tr class="child">
-                                                                        <td><a class="0" href="javascript:;" onclick="deleteProductInfoItem(this);">Delete</a></td>
-                                                                        <td>{{$detail->color->name}}</td>
-                                                                        <td>{{$detail->size->name}}</td>
-                                                                        <td class="c-quantity">{{$detail->quantity}}</td>
-                                                                    </tr>
-                                                                    @endforeach
-                                                                    
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -343,13 +332,35 @@
                                 </div>
                                 <div id="tab-5" class="tab-pane">
                                     <div class="panel-body">
-                                        <strong>Donec quam felis</strong>
-
-                                        <p>Thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects
-                                        and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath </p>
-
-                                        <p>I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite
-                                        sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet.</p>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="form-group">
+                                                    <label class="col-md-2 control-label">Keyword</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" name="keyword" placeholder="" class="form-control m-b"
+                                                        value="@if(isset($data->keyword)){{$data->keyword}}@else{{old('keyword')}}@endif"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group">
+                                                    <label class="col-md-2 control-label">Meta Description</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" name="meta_description" placeholder="" class="form-control m-b"
+                                                        value="@if(isset($data->meta_description)){{$data->meta_description}}@else{{old('meta_description')}}@endif"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group">
+                                                    <label class="col-md-2 control-label">Meta Robot</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" name="meta_robot" placeholder="" class="form-control m-b"
+                                                        value="@if(isset($data->meta_robot)){{$data->meta_robot}}@else{{old('meta_robot')}}@endif"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
