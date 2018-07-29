@@ -44,4 +44,12 @@ class Product extends Model
 
         return $this->hasMany('App\Models\ProductDetail');
     }
+
+    /**
+     * Get the brand that owns the product.
+     */
+    public function brand()
+    {
+        return $this->belongsTo('App\Models\Brand');
+    }
 }

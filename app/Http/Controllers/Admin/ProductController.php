@@ -47,9 +47,9 @@ class ProductController extends AdminController
         }
 
         $this->_data['categoriesTree'] = make_list_hierarchy($category->getCategoriesTree(), $categories);
-        $this->_data['size_options'] = $product->getSizeOptions();
-        $this->_data['color_options'] = $product->getColorOptions();
-        // $this->_data['brand_option'] = $product->getBrandOptions();
+        $this->_data['size_options'] = $product->getSizeOptions($id);
+        $this->_data['color_options'] = $product->getColorOptions($id);
+        $this->_data['brand_options'] = $product->getBrandOptions($id);
 
         $this->_pushBreadCrumbs($this->_data['title']);
         return view('admin.products.view', $this->_data);

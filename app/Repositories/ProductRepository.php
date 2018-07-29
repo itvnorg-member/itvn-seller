@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\Size;
 use App\Models\Color;
+use App\Models\Brand;
 use Illuminate\Support\Facades\Cache;
 use Yajra\DataTables\Facades\DataTables;
 use App\Libraries\Photo;
@@ -95,6 +96,7 @@ Class ProductRepository
 		$model->order = $data['order'];
 		$model->description = $data['description'];
 		$model->quantity = $data['quantity'];
+		$model->brand_id = $data['brand'];
 		if(isset($data['photo'])) {
 
 			if ($model->photo) {
@@ -236,17 +238,29 @@ Class ProductRepository
 		return $return;
 	}
 
-	public function getSizeOptions(){
+	public function getSizeOptions($id){
 		$sizes = Size::select(['sizes.id', 'sizes.name'])->get();
 		$result = make_option($sizes);
 
 		return $result;
 	}
 
-	public function getColorOptions(){
+	public function getColorOptions($id){
 		$colors = Color::select(['colors.id', 'colors.name'])->get();
 		$result = make_option($colors);
 
+		return $result;
+	}
+
+	public function getBrandOptions($id){
+		$model = Product::find($id);
+		$brands = Brand::select(['brands.id', 'brands.name'])->get();
+		if ($model) {
+			$result = make_option($brands, $model->brand->id);
+		}else{
+			$result = make_option($brands);
+		}
+		
 		return $result;
 	}
 }

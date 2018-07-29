@@ -142,20 +142,34 @@
 
                                                 <div class="row">
                                                     <div class="form-group">
-                                                        <label class="col-md-3 control-label">Số lượng</label>
+                                                        <label class="col-md-3 control-label">Barcode</label>
                                                         <div class="col-md-9">
-                                                            <input readonly type="text" name="quantity" placeholder="0" class="form-control m-b c-quatity-input"
-                                                            value="@if(isset($data->quantity)){{$data->quantity}}@else{{old('quantity')}}@endif"/>
+                                                            <input type="text" name="barcode" placeholder="" class="form-control m-b"
+                                                            value="@if(isset($data->barcode)){{$data->barcode}}@else{{old('barcode')}}@endif"/>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="row">
                                                     <div class="form-group">
-                                                        <label class="col-md-3 control-label">Barcode</label>
+                                                        <label class="col-md-3 control-label">Thương hiệu</label>
                                                         <div class="col-md-9">
-                                                            <input type="text" name="barcode" placeholder="" class="form-control m-b"
-                                                            value="@if(isset($data->barcode)){{$data->barcode}}@else{{old('barcode')}}@endif"/>
+                                                            <select id="i-size-selection" class="form-control m-b" name="brand">
+                                                                <option value="" disabled selected>-- Chọn thương hiệu --</option>
+                                                                {!! $brand_options !!}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                        
+
+                                                <div class="row">
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label">Số lượng</label>
+                                                        <div class="col-md-9">
+                                                            <input readonly type="text" name="quantity" placeholder="0" class="form-control m-b c-quatity-input"
+                                                            value="@if(isset($data->quantity)){{$data->quantity}}@else{{old('quantity')}}@endif"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -176,21 +190,6 @@
                                                         <div class="col-md-9">
                                                             <input type="text" name="sell_price" placeholder="" class="form-control m-b"
                                                             value="@if(isset($data->sell_price)){{$data->sell_price}}@else{{old('sell_price')}}@endif"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row hidden">
-                                                    <div class="form-group">
-                                                        <label class="col-md-3 control-label">Kích thước</label>
-                                                        <div class="col-md-9">
-                                                            <select name="sizes" id="" class="form-control m-b">
-                                                                <option value="">-- Chọn kích thước --</option>
-                                                                <option value="">Size XL</option>
-                                                                <option value="">Size L</option>
-                                                                <option value="">Size M</option>
-                                                                <option value="">Size S</option>
-                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>
