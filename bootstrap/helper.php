@@ -70,10 +70,20 @@ function format_price($price)
 {
 	return number_format($price) . ' VND';
 }
+
 function list_ids($array){
 	$return = array();
 	foreach ($array as $key => $value) {
 		$return[$value['id']] = $value['name'];
 	}
+	return $return;
+}
+
+function array_to_string($array){
+	$return = '';
+	foreach ($array as $key => $value) {
+		$return .= $key.',';
+	}
+	$return = rtrim($return, ',');
 	return $return;
 }

@@ -40,10 +40,11 @@ class ProductController extends AdminController
         if ($id) {
             $this->_data['title'] = 'Chỉnh sửa Sản phẩm';
             $this->_data['data'] = $product->getProduct($id);
-            $this->_data['categories'] = $product->idCategories($id);
+            $categories = $product->idCategories($id);
+            $this->_data['categories'] = array_to_string($categories);
         }
 
-        $this->_data['categoriesTree'] = make_list_hierarchy($category->getCategoriesTree(), $this->_data['categories']);
+        $this->_data['categoriesTree'] = make_list_hierarchy($category->getCategoriesTree(), $categories);
 
         $this->_pushBreadCrumbs($this->_data['title']);
         return view('admin.products.view', $this->_data);
