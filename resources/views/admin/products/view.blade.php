@@ -14,31 +14,13 @@
         }
     }
 
-    var sum = 0;
-    function calculateQuantity(){
-        // iterate through each td based on class and add the values
-        $(".c-quantity").each(function() {
-
-            var value = $(this).text();
-            // add only if the value is number
-            if(!isNaN(value) && value.length != 0) {
-                sum += parseFloat(value);
-            }
-
-        });
-        console.log(sum);
-        $('.c-total-quantities').text(sum);
-        $('.c-quatity-input').val(sum);
-        sum = 0;
-    }
-
     $(document).ready(function () {
         $( "#mainForm" ).submit(function( event ) {
             var searchIDs = $("#mainForm .list-tree-section input:checkbox:checked").map(function(){
               return $(this).val();
           }).get();
-          $('input[name="categories"]').val(searchIDs);
-      });
+            $('input[name="categories"]').val(searchIDs);
+        });
 
         $("#bt-reset").click(function () {
             $("#mainForm")[0].reset();
@@ -49,48 +31,37 @@
         //---> Init summer note
         $('.summernote').summernote();
 
-        //---> Add row for table
-        var elColorVal = "";
-        var elSizeVal = "";
-        var elQuantityVal = "";
+        //---> build table details
 
-        function resetVal(){
-            $("#i-color-selection").val("");
-            $("#i-size-selection").val("");
-            $("#i-quantity-input").val("");
-            elColorVal = "";
-            elSizeVal = "";
-            elQuantityVal = "";
-        }
-
-        $("#i-color-selection").change(function(){
-            elColorVal = $(this).val();
-            console.log(elColorVal);
-        });
-
-        $("#i-size-selection").change(function(){
-            elSizeVal = $(this).val();
-            console.log(elSizeVal);
-        });
-
-        $("#i-quantity-input").change(function(){
-            elQuantityVal = $(this).val();
-            console.log(elQuantityVal);
-        });
-
+        var details = [];
         var index = 0;
-        $('.c-add-info').click(function(){
-            if (elColorVal != "" && elSizeVal != "" && elQuantityVal != "") {
-                $('#i-product-info tbody').prepend('<tr class="child '+index+'"><td><a class="'+index+'" href="javascript:;" onclick="deleteProductInfoItem(this);">Delete</a></td><td>'+elColorVal+'</td><td>'+elSizeVal+'</td><td class="c-quantity">'+elQuantityVal+'</td></tr>');
-                calculateQuantity();
-                index++;
-                resetVal();
-            }else{
-                alert("Nhập sai rồi Phước ơi");
-            }
+
+        // When button add details is clicked
+        $('#add_details').click(function(){
+            details[index] = {
+                'color':{'id':$("#i-color-selection").val(),'name':$("#i-color-selection option[value='"+$("#i-color-selection").val()+"']").text()},
+                'size':{'id':$("#i-size-selection").val(),'name':$("#i-size-selection option[value='"+$("#i-size-selection").val()+"']").text()},
+                'quantity':$("#i-quantity-input").val()
+            };
+            index++;
+
+            print_table_details(details);
+            $('input[name="details"]').val(JSON.stringify(details));
+
         });
 
-        $('.c-total-quantities').text(sum);
+        function print_table_details(arr_details){
+            var sum = 0;
+            var html = '';
+            $.each(arr_details, function(key, value){
+                html += '<tr class="child" data-index="'+key+'"><td><a href="javascript:;" onclick="deleteProductInfoItem(this);">Delete</a></td><td>'+value['color']['name']+'</td><td>'+value['size']['name']+'</td><td class="c-quantity">'+value['quantity']+'</td></tr>';
+                sum += parseInt(value['quantity']);
+            });
+            html += '<tr><td></td><td></td><td></td><td>Tổng số lượng: <span class="c-total-quantities">'+sum+'</span></td></tr>';
+            $('#i-product-info tbody').html(html);
+        }
+        
+
 
     });
 </script>
@@ -107,6 +78,7 @@
             <input type="hidden" name="id" value="{{$data->id}}"/>
             @endif
             <input type="hidden" name="categories" value="@if(isset($categories)){{$categories}}@endif"/>
+            <input type="hidden" name="details" value="@if(isset($details)){{$details}}@endif"/>
             <div class="ibox-content">
 
                 <div class="row">
@@ -244,23 +216,18 @@
                                                 <div class="row">
                                                     <div class="form-group">
                                                         <div class="col-md-3">
-                                                            <button type="button" class="btn btn-success pull-right c-add-info">Thêm</button>
+                                                            <button type="button" class="btn btn-success pull-right c-add-info" id="add_details">Thêm</button>
                                                         </div>
                                                         <div class="col-md-3">
                                                             <select name="color" id="i-color-selection" class="form-control">
                                                                 <option value="" disabled selected>-- Chọn màu --</option>
-                                                                <option value="Đỏ">Đỏ</option>
-                                                                <option value="Trắng">Trắng</option>
-                                                                <option value="Vàng">Vàng</option>
-                                                                <option value="Hồng">Hồng</option>
+                                                                {!! $color_options !!}
                                                             </select>
                                                         </div>
                                                         <div class="col-md-3">
                                                             <select name="sizes" id="i-size-selection" class="form-control">
                                                                 <option value="" disabled selected>-- Chọn kích thước --</option>
-                                                                <option value="Lớn">Lớn</option>
-                                                                <option value="Nhỏ">Nhỏ</option>
-                                                                <option value="Vừa">Vừa</option>
+                                                                {!! $size_options !!}
                                                             </select>
                                                         </div>
                                                         <div class="col-md-3">
@@ -283,12 +250,15 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <tr>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td>Tổng số lượng: <span class="c-total-quantities"></span></td>
+                                                                    @foreach($details as $detail)
+                                                                    <tr class="child">
+                                                                        <td><a class="0" href="javascript:;" onclick="deleteProductInfoItem(this);">Delete</a></td>
+                                                                        <td>{{$detail->color->name}}</td>
+                                                                        <td>{{$detail->size->name}}</td>
+                                                                        <td class="c-quantity">{{$detail->quantity}}</td>
                                                                     </tr>
+                                                                    @endforeach
+                                                                    
                                                                 </tbody>
                                                             </table>
                                                         </div>

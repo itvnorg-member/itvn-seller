@@ -32,6 +32,16 @@ class Product extends Model
      */
     public function photos() {
 
-        // return $this->hasMany('App\Models\ProductPhoto');
+        return $this->hasMany('App\Models\ProductPhoto');
+    }
+
+    /**
+     * A product can have many photos.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function details() {
+
+        return $this->hasMany('App\Models\ProductDetail');
     }
 }

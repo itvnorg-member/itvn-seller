@@ -9,6 +9,8 @@
 namespace App\Repositories;
 
 use App\Models\Product;
+use App\Models\Size;
+use App\Models\Color;
 use Illuminate\Support\Facades\Cache;
 use Yajra\DataTables\Facades\DataTables;
 use App\Libraries\Photo;
@@ -151,4 +153,27 @@ Class ProductRepository
 		$model = Product::find($id);
 		$model->categories()->sync($categories);
 	}
+
+	public function getDetails($id){
+		$model = Product::find($id);
+		foreach ($model->details as $detail) {
+			$detail->size;
+			$detail->color;
+		}
+		return $model->details;
+	}
+
+    public function getSizeOptions(){
+        $sizes = Size::select(['sizes.id', 'sizes.name'])->get();
+        $result = make_option($sizes);
+
+        return $result;
+    }
+
+    public function getColorOptions(){
+        $colors = Color::select(['colors.id', 'colors.name'])->get();
+        $result = make_option($colors);
+
+        return $result;
+    }
 }

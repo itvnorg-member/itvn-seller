@@ -4,6 +4,18 @@ function set_active($path, $active = 'active')
 	return call_user_func_array('Request::is', (array)$path) ? $active : '';
 }
 
+function make_option($array, $select = 0){
+	$result = '';
+	foreach ($array as $key => $value) {
+		if ($value['id'] == $select) {
+			$result .= '<option value="'.$value['id'].'" selected="selected">'.$value['name'].'</option>';
+		}else{
+			$result .= '<option value="'.$value['id'].'">'.$value['name'].'</option>';
+		}
+	}
+	return $result;
+}
+
 function make_tree($array, $parent = 0){
 	if (count($array) <= 0) {
 		return false;
