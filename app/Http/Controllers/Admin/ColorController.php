@@ -54,7 +54,7 @@ class ColorController extends AdminController
         $id = $input['id'] ?? null;
 
         $rules = [
-            'name' => 'required|string|max:50',
+            'name' => 'required|string|max:50|unique:colors,name',
             'color'  => 'required',
             'active' => 'required'
         ];

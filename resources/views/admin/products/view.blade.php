@@ -36,6 +36,8 @@
                 $("#mainForm")[0].reset();
             })
 
+            $("#mainForm").validate();
+
             //---> Init summer note
             $('.summernote').summernote();
 
@@ -87,7 +89,7 @@
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-8">
             <div class="ibox float-e-margins pl-15 pr-15">
                 @include('admin._partials._alert')
                 <form role="form" method="POST" id="mainForm" action="{{route('admin.products.store')}}"
@@ -102,7 +104,7 @@
                                 <label class="col-md-2 control-label">Tên sản phẩm (<span
                                             class="text-danger">*</span>)</label>
                                 <div class="col-md-5">
-                                    <input type="text" name="name" placeholder="" class="form-control m-b"
+                                    <input type="text" name="name" placeholder="" class="form-control required m-b"
                                            value="@if(isset($data->name)){{$data->name}}@else{{old('name')}}@endif"/>
                                 </div>
                             </div>
@@ -175,9 +177,10 @@
 
                         <div class="row">
                             <div class="form-group">
-                                <label class="col-md-2 control-label">Mô tả</label>
+                                <label class="col-md-2 control-label">Mô tả (<span
+                                            class="text-danger">*</span>)</label>
                                 <div class="col-md-5">
-                                    <textarea name="description" id="" cols="30" rows="10"  class="form-control m-b">@if(isset($data->description)){{$data->description}}@else{{old('description')}}@endif</textarea>
+                                    <textarea name="description" id="" cols="30" rows="10"  class="form-control required m-b">@if(isset($data->description)){{$data->description}}@else{{old('description')}}@endif</textarea>
                                 </div>
                             </div>
                         </div>
@@ -287,6 +290,9 @@
                     </div>
                 </form>
             </div>
+        </div>
+        <div class="col-md-4">
+            {!! $categoriesTree !!}
         </div>
     </div>
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Repositories\ProductRepository;
+use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
@@ -31,7 +32,7 @@ class ProductController extends AdminController
         return view('admin.products.index', $this->_data);
     }
 
-    public function view(ProductRepository $product)
+    public function view(ProductRepository $product, CategoryRepository $category)
     {
         $id = $this->_request->get('id');
         $this->_data['title'] = 'Tạo mới Sản phẩm';
@@ -39,6 +40,8 @@ class ProductController extends AdminController
             $this->_data['title'] = 'Chỉnh sửa Sản phẩm';
             $this->_data['data'] = $product->getProduct($id);
         }
+
+        $this->_data['categoriesTree'] = make_list_hierarchy($category->getCategoriesTree());
 
         $this->_pushBreadCrumbs($this->_data['title']);
         return view('admin.products.view', $this->_data);
@@ -54,7 +57,8 @@ class ProductController extends AdminController
         $id = $input['id'] ?? null;
 
         $rules = [
-            'name' => 'required|string|max:50',
+            'name' => 'required|string|max:50|unique:products,name',
+            'description' => 'required',
             'active' => 'required'
         ];
         $message = 'Sản phẩm đã được tạo.';

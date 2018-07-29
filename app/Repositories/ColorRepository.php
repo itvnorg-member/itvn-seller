@@ -73,20 +73,6 @@ Class ColorRepository
 		return $dataTable;
 	}
 
-	public function addColor($color)
-	{
-		$colors = $this->getColors();
-		array_push($colors, $color);
-		Cache::forever(self::CACHE_NAME_COLORS, $colors);
-
-		return $color;
-	}
-
-	public function getColors()
-	{
-		return Cache::get(self::CACHE_NAME_COLORS, []);
-	}
-
 	public function getColor($id)
 	{
 		$data = Color::find($id);
