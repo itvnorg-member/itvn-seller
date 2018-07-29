@@ -14,6 +14,34 @@
         }
     }
 
+    function uploadMultipleImages(){
+        if (window.File && window.FileList && window.FileReader) {
+            $(".c-mutiple-input").on("change", function(e) {
+                  var files = e.target.files,
+                  filesLength = files.length;
+                  for (var i = 0; i < filesLength; i++) {
+                    var f = files[i]
+                    var fileReader = new FileReader();
+                    fileReader.onload = (function(e) {
+                        var file = e.target;
+                        $("<span class=\"pip\">" +
+                        "<span class='img-wrapper'><img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/></span>" +
+                        "<span class=\"btn btn-outline btn-danger remove\">Remove image</span>" +
+                        "</span>").appendTo(".c-gallery-preview");
+                        $(".remove").click(function(){
+                            $(this).parent(".pip").remove();
+                            // $('.c-mutiple-input').val();
+                        });
+
+                    });
+                    fileReader.readAsDataURL(f);
+                }
+            });
+        } else {
+            alert("Your browser doesn't support to File API")
+        }
+    }
+
     $(document).ready(function () {
         $( "#mainForm" ).submit(function( event ) {
             var searchIDs = $("#mainForm .list-tree-section input:checkbox:checked").map(function(){
@@ -61,7 +89,7 @@
             $('#i-product-info tbody').html(html);
         }
         
-
+        uploadMultipleImages();
 
     });
 </script>
@@ -305,11 +333,12 @@
                                 </div>
                                 <div id="tab-4" class="tab-pane">
                                     <div class="panel-body">
-                                        <div class="dropzone" id="dropzoneForm">
-                                            <div class="fallback">
-                                                <input name="file" type="file" multiple />
+                                        <div class="collection-photos">
+                                            <input class="c-mutiple-input" name="product_photos[]" type="file" accept="image/*" multiple value="" />
+                                            <div class="row">
+                                                <div class="col-md-12 c-gallery-preview"></div>
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                                 <div id="tab-5" class="tab-pane">
