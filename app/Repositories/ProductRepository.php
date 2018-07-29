@@ -42,23 +42,23 @@ Class ProductRepository
 			$html .= '<i class="fa fa-trash-o" aria-hidden="true"></i> Xóa</a>';
 			return $html;
 		})
-        ->addColumn('status', function ($product) {
-            $active = '';
-            $disable = '';
-            if ($product->active === ACTIVE) {
-                $active  = 'checked';
-            }
-            $html = '<input type="checkbox" '.$disable.' data-name="'.$product->name.'" data-id="'.$product->id.'" name="social' . $product->active . '" class="js-switch" value="' . $product->active . '" ' . $active . ' ./>';
-            return $html;
-        })
+		->addColumn('status', function ($product) {
+			$active = '';
+			$disable = '';
+			if ($product->active === ACTIVE) {
+				$active  = 'checked';
+			}
+			$html = '<input type="checkbox" '.$disable.' data-name="'.$product->name.'" data-id="'.$product->id.'" name="social' . $product->active . '" class="js-switch" value="' . $product->active . '" ' . $active . ' ./>';
+			return $html;
+		})
 		->addColumn('photo', function ($product) {
-                if ($product->photo) {
-                    $html = '<img style="width: 80px; height: 60px;" class="img-thumbnail" src="' . asset('storage/' . $product->photo). '" />';
-                } else {
-                    $html = ' <img alt="No Photo" style="width: 80px; height: 60px;" class="img-thumbnail" src="'.asset(NO_PHOTO).'" >';
-                }
-                return $html;
-            })
+			if ($product->photo) {
+				$html = '<img style="width: 80px; height: 60px;" class="img-thumbnail" src="' . asset('storage/' . $product->photo). '" />';
+			} else {
+				$html = ' <img alt="No Photo" style="width: 80px; height: 60px;" class="img-thumbnail" src="'.asset(NO_PHOTO).'" >';
+			}
+			return $html;
+		})
 		->rawColumns(['photo', 'status', 'action'])
 		->toJson();
 
@@ -85,18 +85,22 @@ Class ProductRepository
 		$model->description = $data['description'];
 		if(isset($data['photo'])) {
 
-            if ($model->photo) {
-                Storage::delete($model->photo);
-            }
-            $upload = new Photo($data['photo']);
-            $model->photo = $upload->uploadTo('products');
-            $model->code = "";
-        }else{
-        	$model->code = $data['code'];
-        	$model->photo = "";
-        }
+			if ($model->photo) {
+				Storage::delete($model->photo);
+			}
+			$upload = new Photo($data['photo']);
+			$model->photo = $upload->uploadTo('products');
+			$model->code = "";
+		}else{
+			$model->code = $data['code'];
+			$model->photo = "";
+		}
 
 		$model->save();
+
+		if (isset($data['categories'])) {
+			$this->addCategories($model->id, $data['categories']);
+		}
 
 		return $model;
 	}
@@ -115,30 +119,36 @@ Class ProductRepository
 				continue;
 			}
 			if ($product->photo) {
-                Storage::delete($user->photo);
-            }
+				Storage::delete($user->photo);
+			}
 			$product->delete();
 		}
 
 		return $result;
 	}
 
-    public function changeStatus($productID, $status)
-    {
-        $model = Product::find($productID);
-        $model->active = $status;
-        return $model->save();
-    }
+	public function changeStatus($productID, $status)
+	{
+		$model = Product::find($productID);
+		$model->active = $status;
+		return $model->save();
+	}
 
-    public function categories($id){
-    	$model = Product::find($id);
-    	$categories = $model->categories;
-        return $categories;
-    }
+	public function categories($id){
+		$model = Product::find($id);
+		$categories = $model->categories;
+		return $categories;
+	}
 
-    public function idCategories($id){
-    	$categories = $this->categories($id);
-        $idCategories = list_ids($categories);
-        return $idCategories;
-    }
+	public function idCategories($id){
+		$categories = $this->categories($id);
+		$idCategories = list_ids($categories);
+		return $idCategories;
+	}
+
+	public function addCategories($id, $categories_string){
+		$categories = explode(',', $categories_string);
+		$model = Product::find($id);
+		$model->categories()->sync($categories);
+	}
 }
