@@ -156,7 +156,18 @@
             $("#mainForm")[0].reset();
         });
 
-        $("#mainForm").validate();
+        $("#mainForm").validate({
+            rules:{
+                price:{
+                    // min: 0,
+                    number: true
+                },
+                sell_price:{
+                    // min: 0,
+                    number: true
+                }
+            }
+        });
 
         //---> Init summer note
         $('.summernote').summernote();
@@ -214,7 +225,15 @@
 
       checkSiblings(container);
   });
-        
+        new Cleave('.input-price', {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand'
+        });
+
+        new Cleave('.input-sell-price', {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand'
+        });
 
     });
 </script>
@@ -262,9 +281,14 @@
                                                 <div class="row">
                                                     <div class="form-group">
                                                         <label class="col-md-3 control-label">Mã sản phẩm</label>
-                                                        <div class="col-md-9">
+                                                        <div class="col-md-3">
                                                             <input type="text" name="code" placeholder="" class="form-control m-b"
                                                             value="@if(isset($data->code)){{$data->code}}@else{{old('code')}}@endif"/>
+                                                        </div>
+                                                        <label class="col-md-2 control-label">Số lượng</label>
+                                                        <div class="col-md-3">
+                                                            <input readonly type="text" name="quantity" placeholder="0" class="form-control m-b c-quatity-input"
+                                                            value="@if(isset($data->quantity)){{$data->quantity}}@else{{old('quantity')}}@endif"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -272,7 +296,7 @@
                                                 <div class="row">
                                                     <div class="form-group">
                                                         <label class="col-md-3 control-label">Barcode</label>
-                                                        <div class="col-md-9">
+                                                        <div class="col-md-4">
                                                             <input type="text" name="barcode" placeholder="" class="form-control m-b"
                                                             value="@if(isset($data->barcode)){{$data->barcode}}@else{{old('barcode')}}@endif"/>
                                                         </div>
@@ -293,39 +317,23 @@
 
                                                 <div class="row">
                                                     <div class="form-group">
-                                                        <label class="col-md-3 control-label">Số lượng</label>
-                                                        <div class="col-md-9">
-                                                            <input readonly type="text" name="quantity" placeholder="0" class="form-control m-b c-quatity-input"
-                                                            value="@if(isset($data->quantity)){{$data->quantity}}@else{{old('quantity')}}@endif"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="form-group">
-                                                        <label class="col-md-3 control-label">Đơn giá</label>
-                                                        <div class="col-md-9">
-                                                            <input type="text" name="price" placeholder="" class="form-control m-b"
+                                                        <label class="col-md-3 control-label">Giá nhập</label>
+                                                        <div class="col-md-3">
+                                                            <input type="text" name="price" placeholder="" class="form-control m-b input-price"
                                                             value="@if(isset($data->price)){{$data->price}}@else{{old('price')}}@endif"/>
                                                         </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="form-group">
-                                                        <label class="col-md-3 control-label">Giá bán</label>
-                                                        <div class="col-md-9">
-                                                            <input type="text" name="sell_price" placeholder="" class="form-control m-b"
-                                                            value="@if(isset($data->sell_price)){{$data->sell_price}}@else{{old('sell_price')}}@endif"/>
+                                                        <label class="col-md-2 control-label">Giá bán</label>
+                                                        <div class="col-md-3">
+                                                            <input type="text" name="sell_price" placeholder="" class="form-control m-b input-sell-price" value="@if(isset($data->sell_price)){{$data->sell_price}}@else{{old('sell_price')}}@endif"/>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="row">
                                                     <div class="form-group">
-                                                        <label class="col-md-3 control-label">Mô tả (<span class="text-danger">*</span>)</label>
+                                                        <label class="col-md-3 control-label">Mô tả</label>
                                                         <div class="col-md-9">
-                                                            <textarea name="description" id="" cols="30" rows="10"  class="form-control required m-b">@if(isset($data->description)){{$data->description}}@else{{old('description')}}@endif</textarea>
+                                                            <textarea name="description" id="" cols="30" rows="10"  class="form-control m-b">@if(isset($data->description)){{$data->description}}@else{{old('description')}}@endif</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -342,7 +350,7 @@
                                                 <div class="row">
                                                     <div class="form-group">
                                                         <label class="col-md-3 control-label">Thứ tự</label>
-                                                        <div class="col-md-9">
+                                                        <div class="col-md-3">
                                                             <input type="text" name="order" placeholder="" class="form-control m-b"
                                                             value="@if(isset($data->order)){{$data->order}}@else{{old('order')}}@endif"/>
                                                         </div>
@@ -409,10 +417,6 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <h5>Danh mục sản phẩm</h5>
-                                                <div class="list-tree-section m-b">
-                                                    {!! $categoriesTree !!}
-                                                </div>
                                                 <!-- BEGIN: Product photo -->
                                                 <div class="c-product-photo">
                                                     @if(!isset($data->photo) || empty($data->photo) || $data->photo === '' )
@@ -442,6 +446,10 @@
                                                     @endif
                                                 </div>
                                                 <!-- END: Product photo -->
+                                                <h5>Danh mục sản phẩm</h5>
+                                                <div class="list-tree-section m-b">
+                                                    {!! $categoriesTree !!}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

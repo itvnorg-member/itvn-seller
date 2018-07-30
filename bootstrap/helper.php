@@ -43,7 +43,7 @@ function option_menu($array, $text = "", $select = 0, $result = ''){
 		}
 		
 		if (count($value['children']) > 0) {
-			$result .= option_menu($value['children'], $text."|_", $select);
+			$result .= option_menu($value['children'], $text."___", $select);
 		}
 
 		unset($array[$key]);
@@ -66,6 +66,22 @@ function make_list_hierarchy($array, $checked = array(), $result = ''){
 		
 		if (count($value['children']) > 0) {
 			$result .= make_list_hierarchy($value['children'], $checked);
+		}
+		$result .= '</li>';
+
+		unset($array[$key]);
+	}
+	$result .= '</ul>';
+	return $result;
+}
+
+function make_list_hierarchy_no_checkbox($array){
+	$result = '<ul class="list-tree">';
+	foreach ($array as $key => $value) {
+		$result .= '<li class="list-tree-item"><label>'.$value['name'].'</label>';
+		
+		if (count($value['children']) > 0) {
+			$result .= make_list_hierarchy_no_checkbox($value['children']);
 		}
 		$result .= '</li>';
 

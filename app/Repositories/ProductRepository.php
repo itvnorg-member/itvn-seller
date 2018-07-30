@@ -30,6 +30,11 @@ Class ProductRepository
 
 		$dataTable = DataTables::eloquent($products)
 		->filter(function ($query) use ($request) {
+			if (trim($request->get('category')) !== "") {
+				$query->join('product_category', 'products.id', '=', 'product_category.product_id')
+					->where('product_category.category_id', $request->get('category'));
+			}
+			
 			if (trim($request->get('status')) !== "") {
 				$query->where('products.active', $request->get('status'));
 			}
@@ -69,7 +74,13 @@ Class ProductRepository
 			$category = $this->lowestLevelCategory($product->id);
 			return $category->name;
 		})
-		->rawColumns(['category', 'photo', 'status', 'action'])
+		->addColumn('name', function($product){
+			$html = '';
+			$html .= '<p>'.$product->name.'</p>';
+			$html .= '<p>'.$product->sizes.'</p>';
+			return $html;
+		})
+		->rawColumns(['category', 'photo', 'status', 'action', 'name'])
 		->toJson();
 
 		return $dataTable;
@@ -98,8 +109,8 @@ Class ProductRepository
 		$model->content = $data['content'];
 		$model->code = $data['code'];
 		$model->barcode = $data['barcode'];
-		$model->price = $data['price'];
-		$model->sell_price = $data['sell_price'];
+		$model->price = preg_replace('/[^0-9]/', '', $data['price']);
+		$model->sell_price = preg_replace('/[^0-9]/', '', $data['sell_price']);
 		if(isset($data['photo'])) {
 
 			if ($model->photo) {

@@ -24,6 +24,7 @@
                 "data": function ( d ) {
                     d.keyword = $('#s-keyword').val();
                     d.status = $('#s-status').val();
+                    d.category = $('#s-category').val();
                 },
                 complete: function(){
                     var inputStatus = document.querySelectorAll('.js-switch');
@@ -106,15 +107,14 @@
             {data: 'category'},
             {data: 'quantity_available'},
             {data: 'price'},
-            {data: 'sizes'},
             {data: 'sell_price'},
             {data: 'status'},
             {data: 'action'}
             ],
             "aoColumnDefs": [
                     // Column index begins at 0
-                    { "sClass": "text-center", "aTargets": [ 8 ] },
-                    { "sClass": "text-right", "aTargets": [ 9 ] }
+                    { "sClass": "text-center", "aTargets": [ 7 ] },
+                    { "sClass": "text-right", "aTargets": [ 8 ] }
                     ],
                     "language": {
                         "decimal": "",
@@ -218,6 +218,17 @@ $("#dataTables").on("click", '.bt-delete', function(){
                     <input type="text" placeholder="Nhập tên" name="keyword" id="s-keyword" class="form-control" value="{{app('request')->input('keyword')}}">
                 </div>
             </div>
+            
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label>Chọn danh mục</label>
+                    <select class="form-control" name="category" id="s-category">
+                        <option value=""> -- Tất cả -- </option>
+                        {!! $categoryOptions !!}
+                    </select>
+                </div>
+            </div>
+
 
             <div class="col-sm-3">
                 <div class="form-group">
@@ -263,7 +274,6 @@ $("#dataTables").on("click", '.bt-delete', function(){
                         <th>Danh mục</th>
                         <th>Số lượng tồn</th>
                         <th>Giá bán</th>
-                        <th>Size</th>
                         <th>Giá bán buôn</th>
                         <th>Trạng Thái</th>
                         <th></th>

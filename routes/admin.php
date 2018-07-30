@@ -23,6 +23,16 @@ Route::prefix('cong-tac-vien')
         Route::put ('/change-status', 'PartnerController@changeStatus')->name('admin.partners.changeStatus');
     });
 
+Route::prefix('nha-cung-cap')
+    ->middleware('permission:supplier_manager')->group(function () {
+        Route::get ('/', 'SupplierController@index')->name('admin.suppliers.index');
+        Route::get ('/chi-tiet', 'SupplierController@view')->name('admin.suppliers.view');
+        Route::get ('/them', 'SupplierController@view')->name('admin.suppliers.create');
+        Route::post ('/them', 'SupplierController@store')->name('admin.suppliers.store');
+        Route::delete ('/', 'SupplierController@delete')->name('admin.suppliers.delete');
+        Route::put ('/change-status', 'SupplierController@changeStatus')->name('admin.suppliers.changeStatus');
+    });
+
 Route::prefix('khach-hang')
 ->middleware('permission:customer_manager')->group(function () {
     Route::get ('/', 'CustomerController@index')->name('admin.customer.index');

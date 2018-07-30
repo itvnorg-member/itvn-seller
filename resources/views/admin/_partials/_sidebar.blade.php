@@ -24,6 +24,12 @@
                     <a href="{{route('admin.partners.index')}}"><i class="fa fa-users" aria-hidden="true"></i> <span class="nav-label">Cộng Tác Viên</span></a>
                 </li>
             @endif
+            
+            @if(key_exists('supplier_manager', Auth::user()->permissions))
+                <li class="{{ set_active(['quan-ly/nha-cung-cap*']) }} nav-item">
+                    <a href="{{route('admin.suppliers.index')}}"><i class="fa fa-users" aria-hidden="true"></i> <span class="nav-label">Nhà Cung Cấp</span></a>
+                </li>
+            @endif
 
             @if(key_exists('customer_manager', Auth::user()->permissions))
                 <li class="{{ set_active(['quan-ly/khach-hang*']) }} nav-item">

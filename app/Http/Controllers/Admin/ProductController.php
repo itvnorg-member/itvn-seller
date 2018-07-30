@@ -22,12 +22,14 @@ class ProductController extends AdminController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ProductRepository $product){
+    public function index(ProductRepository $product, CategoryRepository $category){
         if ($this->_request->ajax()){
             return $product->dataTable($this->_request);
         }
 
+        $id = ($this->_request->get('id')) ? $this->_request->get('id') : 0 ;
         $this->_data['title'] = 'Sản phẩm';
+        $this->_data['categoryOptions'] = $category->getCategoryOptions($id);
 
         return view('admin.products.index', $this->_data);
     }
@@ -68,7 +70,6 @@ class ProductController extends AdminController
 
         $rules = [
             'name' => 'required|string|max:50|unique:products,name',
-            'description' => 'required',
             'active' => 'required'
         ];
         $message = 'Sản phẩm đã được tạo.';
