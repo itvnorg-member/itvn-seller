@@ -7,6 +7,8 @@
 <script>
 
     var details = ($('input[name="details"]').val()) ? jQuery.parseJSON($('input[name="details"]').val()) : [];
+    var colors = ($('input[name="colors"]').val()) ? jQuery.parseJSON($('input[name="colors"]').val()) : [];
+    var photos = ($('input[name="photos"]').val()) ? jQuery.parseJSON($('input[name="photos"]').val()) : [];
 
     function print_table_details(arr_details){
         var sum = 0;
@@ -39,43 +41,101 @@
         print_table_details(details);
     });
 
-    function uploadMultipleImages(){
-        if (window.File && window.FileList && window.FileReader) {
-            $(".c-mutiple-input").on("change", function(e) {
-              var files = e.target.files,
-              filesLength = files.length;
-              for (var i = 0; i < filesLength; i++) {
-                var f = files[i]
-                var fileReader = new FileReader();
-                fileReader.onload = (function(e) {
-                    var file = e.target;
-                    $("<span class=\"pip\">" +
-                        "<span class='img-wrapper'><img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/></span>" +
-                        "<span class=\"btn btn-outline btn-danger remove\">Remove image</span>" +
-                        "</span>").appendTo(".c-gallery-preview");
-                    $(".remove").click(function(){
-                        $(this).parent(".pip").remove();
-                            // $('.c-mutiple-input').val();
-                        });
 
-                });
-                fileReader.readAsDataURL(f);
-            }
+    var files = [];
+
+    $('.c-mutiple-input').on('change', preparePhotosTable);
+
+    function preparePhotosTable(event)
+    {
+        tmp_files = event.target.files;
+        $.each(tmp_files, function(key, value){
+            photos.push({
+                'file':value,
+                'file_name':value.name,
+                'color_code':0,
+                'name':value.name,
+                'order':'0',
+                'delete':false
+            });
+            files.push(value);
         });
-        } else {
-            alert("Your browser doesn't support to File API")
-        }
+        print_table_photos(photos);
     }
 
-    var upload = document.getElementById("product_photos");
+    // function updatePhotosData(){
+    //     $.each(photos, function(key, value){
+    //         photos[key].color_code = ($('#select_color'+key).val() != 0) ? $('#select_color'+key).val() : photos[key].color_code;
+    //         photos[key].name = ($('#photo_name_'+key).val()) ? $('#photo_name_'+key).val() : photos[key].name;
+    //         photos[key].order = ($('#photo_order_'+key).val()) ? $('#photo_order_'+key).val() : photos[key].order;
+    //     });
+    // }
 
-    upload.onchange = function(e) {
-        var files = e.target.files;
-        var firstFile = files.item(1); 
-        var idstokeep = [0, 2];
-        var _files = Array.prototype.slice.call(files).splice(idstokeep[0], idstokeep[1]);
-        console.log(files);
-    };
+    function print_table_photos(arr_photos){
+        var html = '';
+        $('#i-product-photos tbody').html(html);
+        $.each(arr_photos, function(key, value){
+
+            if (value.delete != true) {
+                if (value.file) {
+                    var fileReader = new FileReader();
+                    fileReader.onload = (function(e) {
+                        html_photo_color_option = '<select id="select_color'+key+'">';
+                        html_photo_color_option += '<option value="0">Chọn màu</option>';
+                        $.each(colors, function(key_color, value_color){
+                            if (value_color.id == value.color_code) {
+                                html_photo_color_option += '<option value="'+value_color.id+'" selected>'+value_color.name+'</option>';
+                            }else{
+                                html_photo_color_option += '<option value="'+value_color.id+'">'+value_color.name+'</option>';
+                            }
+                        });
+                        html_photo_color_option += '</select>';
+
+                        html_photo_input_name = '<input type="text" value="'+value['name']+'" id="photo_name_'+key+'">';
+
+                        html_photo_input_order = '<input type="text" value="'+value['order']+'" id="photo_order_'+key+'">';
+
+                        html = '<tr class="child" id="photo_row_'+key+'"><td><a href="javascript:;" onclick="deletePhoto('+key+');">Xóa</a> <a href="javascript:;" onclick="updatePhoto('+key+');">Sửa</a></td><td><span class="img-wrapper"><img class="imageThumb" src="' + e.target.result + '" title="' + value.name + '"/></span></td><td>'+html_photo_color_option+'</td><td>'+html_photo_input_name+'</td><td class="c-quantity">'+html_photo_input_order+'</td></tr>';
+                        $(html).appendTo('#i-product-photos tbody');
+                    });
+                    fileReader.readAsDataURL(value.file);
+                }else{
+                    html_photo_color_option = '<select id="select_color'+key+'">';
+                    html_photo_color_option += '<option value="0">Chọn màu</option>';
+                    $.each(colors, function(key_color, value_color){
+                        if (value_color.id == value.color_code) {
+                            html_photo_color_option += '<option value="'+value_color.id+'" selected>'+value_color.name+'</option>';
+                        }else{
+                            html_photo_color_option += '<option value="'+value_color.id+'">'+value_color.name+'</option>';
+                        }
+                    });
+                    html_photo_color_option += '</select>';
+
+                    html_photo_input_name = '<input type="text" value="'+value['name']+'" id="photo_name_'+key+'">';
+
+                    html_photo_input_order = '<input type="text" value="'+value['order']+'" id="photo_order_'+key+'">';
+
+                    html = '<tr class="child" id="photo_row_'+key+'"><td><a href="javascript:;" onclick="deletePhoto('+key+');">Xóa</a> <a href="javascript:;" onclick="updatePhoto('+key+');">Sửa</a></td><td><span class="img-wrapper"><img class="imageThumb" src="' + value.origin_url + '" title="' + value.name + '"/></span></td><td>'+html_photo_color_option+'</td><td>'+html_photo_input_name+'</td><td class="c-quantity">'+html_photo_input_order+'</td></tr>';
+                    $(html).appendTo('#i-product-photos tbody');
+                }
+            }
+
+        });
+        // updatePhotosData();
+        $('input[name="photos"]').val(JSON.stringify(photos));
+    }
+
+    function deletePhoto(key){
+        photos[key].delete = true;
+        print_table_photos(photos);
+    }
+
+    function updatePhoto(key){
+        photos[key].color_code = ($('#select_color'+key).val()) ? $('#select_color'+key).val() : photos[key].color_code;
+        photos[key].name = ($('#photo_name_'+key).val()) ? $('#photo_name_'+key).val() : photos[key].name;
+        photos[key].order = ($('#photo_order_'+key).val()) ? $('#photo_order_'+key).val() : photos[key].order;
+        print_table_photos(photos);
+    }
 
     $(document).ready(function () {
         $( "#mainForm" ).submit(function( event ) {
@@ -94,10 +154,8 @@
         //---> Init summer note
         $('.summernote').summernote();
 
-        //---> build table details
-        
         print_table_details(details);
-        uploadMultipleImages();
+        print_table_photos(photos);
 
     });
 </script>
@@ -115,6 +173,8 @@
             @endif
             <input type="hidden" name="categories" value="@if(isset($categories)){{$categories}}@endif"/>
             <input type="hidden" name="details" value="@if(isset($details)){{$details}}@endif"/>
+            <input type="hidden" name="photos" value="@if(isset($photos)){{$photos}}@endif"/>
+            <input type="hidden" name="colors" value="@if(isset($colors)){{$colors}}@endif"/>
             <div class="ibox-content">
 
                 <div class="row">
@@ -165,7 +225,7 @@
                                                         <label class="col-md-3 control-label">Thương hiệu</label>
                                                         <div class="col-md-9">
                                                             <select name="brand_id" class="form-control m-b">
-                                                                <option value="" disabled selected>-- Chọn thương hiệu --</option>
+                                                                <option value="" selected>-- Chọn thương hiệu --</option>
                                                                 {!! $brand_options !!}
                                                             </select>
                                                         </div>
@@ -349,6 +409,8 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
+
+
                                                             </tbody>
                                                         </table>
                                                     </div>

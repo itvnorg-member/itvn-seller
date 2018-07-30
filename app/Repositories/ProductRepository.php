@@ -10,6 +10,7 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use App\Models\ProductDetail;
+use App\Models\ProductPhoto;
 use App\Models\Size;
 use App\Models\Color;
 use App\Models\Brand;
@@ -123,9 +124,9 @@ Class ProductRepository
 			$model->sizes = $tmp_data['sizes'];
 			$model->save();
 		}
-
-		if (isset($data['product_photos'])) {
-			$this->addPhotos($model->id, $data['product_photos']);
+		if (isset($data['product_photos']) || isset($data['photos'])) {
+			$data['product_photos'] = (isset($data['product_photos'])) ? $data['product_photos'] : null;
+			$this->addPhotos($model->id, $data['product_photos'], $data['photos']);
 		}
 
 		return $model;
@@ -215,9 +216,63 @@ Class ProductRepository
 		return $data;
 	}
 
-	public function addPhotos($id, $photos){
+	public function addPhotos($id, $files = null, $photos){
+		$photos = json_decode($photos);
 		$model = Product::find($id);
-		dd($photos);
+		foreach ($photos as $key => $photo) {
+
+			if (isset($photo->id)) {
+				$modelPhoto = ProductPhoto::find($photo->id);
+				if ($modelPhoto) {
+					if (isset($photo->delete) && $photo->delete == true) {
+						Storage::delete($modelPhoto->origin);
+	                // Storage::delete($modelPhoto->large);
+	                // Storage::delete($modelPhoto->thumb);
+						$modelPhoto->delete();
+					}else{
+						$modelPhoto->name = $photo->name;
+						$modelPhoto->color_code = $photo->color_code;
+						$modelPhoto->order = $photo->order;
+						$modelPhoto->save();
+					}
+				}
+			}else{
+				if ($photo->file_name) {
+					if ($files) {
+						foreach ($files as $file) {
+							if ($photo->file_name == $file->getClientOriginalName() && $photo->delete != true) {
+								$upload = new Photo($file);
+								$modelPhoto = new ProductPhoto([
+									'name' => $photo->name,
+									'color_code' => $photo->color_code,
+									'order' => $photo->order,
+									'origin' => $upload->uploadTo('product_photos'),
+									// 'large' => $upload->resizeTo('product_photos', Product::LARGE_WIDTH, Product::LARGE_HEIGHT),
+									// 'thumb' => $upload->resizeTo('product_photos', Product::THUMB_WIDTH, Product::THUMB_HEIGHT)
+								]);
+								$model->photos()->save($modelPhoto);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public function getPhotos($id){
+		$model = Product::find($id);
+		$return = [];
+		foreach ($model->photos as $key => $value) {
+			$return[] = [
+				'id' => $value->id,
+				'name'	=>	$value->name,
+				'color_code' => $value->color_code,
+				'origin' => $value->origin,
+				'origin_url' => asset('storage/' . $value->origin),
+				'order' => $value->order
+			];
+		}
+		return $return;
 	}
 
 	public function getDetails($id){
@@ -241,6 +296,12 @@ Class ProductRepository
 			];
 		}
 		return $return;
+	}
+
+	public function getColors(){
+		$colors = Color::select(['colors.id', 'colors.name'])->get();
+
+		return $colors;
 	}
 
 	public function getSizeOptions($id){

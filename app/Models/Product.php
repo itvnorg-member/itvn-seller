@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+
+    const LARGE_HEIGHT = 300;
+    const LARGE_WIDTH = 400;
+
+    const THUMB_HEIGHT = 50;
+    const THUMB_WIDTH = 80;
+
      /**
      * The attributes that are mass assignable.
      *

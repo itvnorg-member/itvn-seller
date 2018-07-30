@@ -44,12 +44,14 @@ class ProductController extends AdminController
             $this->_data['categories'] = array_to_string($categories);
 
             $this->_data['details'] = json_encode($product->getDetails($id));
+            $this->_data['photos'] = json_encode($product->getPhotos($id));
         }
 
         $this->_data['categoriesTree'] = make_list_hierarchy($category->getCategoriesTree(), $categories);
         $this->_data['size_options'] = $product->getSizeOptions($id);
         $this->_data['color_options'] = $product->getColorOptions($id);
         $this->_data['brand_options'] = $product->getBrandOptions($id);
+        $this->_data['colors'] = $product->getColors();
 
         $this->_pushBreadCrumbs($this->_data['title']);
         return view('admin.products.view', $this->_data);
