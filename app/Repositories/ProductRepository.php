@@ -11,6 +11,7 @@ namespace App\Repositories;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\ProductPhoto;
+use App\Models\Category;
 use App\Models\Size;
 use App\Models\Color;
 use App\Models\Brand;
@@ -65,12 +66,8 @@ Class ProductRepository
 			return $html;
 		})
 		->addColumn('category', function ($product) {
-			$categories = $this->categories($product->id);
-			$cat_names = [];
-			foreach ($categories as $category) {
-				$cat_names[] = $category->name;
-			}
-			return implode($cat_names, ', ');
+			$category = $this->lowestLevelCategory($product->id);
+			return $category->name;
 		})
 		->rawColumns(['category', 'photo', 'status', 'action'])
 		->toJson();
@@ -167,6 +164,15 @@ Class ProductRepository
 		return $categories;
 	}
 
+	public function lowestLevelCategory($id){
+		$category = Category::whereHas('products', function($q) use($id)
+		{
+			$q->where('id', '=', $id);
+
+		})->orderBy('level', 'desc')->first();
+		return $category;
+	}
+
 	public function idCategories($id){
 		$categories = $this->categories($id);
 		$idCategories = list_ids($categories);
@@ -185,12 +191,17 @@ Class ProductRepository
 		$sizes = [];
 		$colors = [];
 		foreach ($details as $detail) {
-			$modelDetail = ProductDetail::where('product_id', $id)
-			->where('color_id', $detail->color->id)
-			->where('size_id', $detail->size->id)->first();
-			if (!empty($modelDetail)) {
-				$modelDetail->quantity = $detail->quantity;
-				$modelDetail->save();
+
+			if (isset($detail->id)) {
+				$modelDetail = ProductDetail::find($detail->id);
+				if ($modelDetail) {
+					if (isset($detail->delete) && $detail->delete == true) {
+						$modelDetail->delete();
+					}else{
+						$modelDetail->quantity = $detail->quantity;
+						$modelDetail->save();
+					}
+				}
 			}else{
 				$modelDetail = new ProductDetail([
 					'color_id' => $detail->color->id,
@@ -284,13 +295,14 @@ Class ProductRepository
 		$return = [];
 		foreach ($model->details as $key => $value) {
 			$return[] = [
+				'id' => $value->id,
 				'color' => [
-					'id' => $value->color->id,
-					'name'	=>	$value->color->name
+					'id' => (isset($value->color)) ? $value->color->id : "",
+					'name'	=>	(isset($value->color)) ? $value->color->name : ""
 				],
 				'size' => [
-					'id' => $value->size->id,
-					'name'	=>	$value->size->name
+					'id' => (isset($value->size)) ? $value->size->id : "",
+					'name'	=>	(isset($value->size)) ? $value->size->name : ""
 				],
 				'quantity' => $value->quantity
 			];
@@ -321,7 +333,7 @@ Class ProductRepository
 	public function getBrandOptions($id){
 		$model = Product::find($id);
 		$brands = Brand::select(['brands.id', 'brands.name'])->get();
-		if ($model) {
+		if ($model && isset($model->brand->id)) {
 			$result = make_option($brands, $model->brand->id);
 		}else{
 			$result = make_option($brands);
