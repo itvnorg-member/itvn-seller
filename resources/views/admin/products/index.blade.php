@@ -113,8 +113,8 @@
             ],
             "aoColumnDefs": [
                     // Column index begins at 0
-                    { "sClass": "text-center", "aTargets": [ 7 ] },
-                    { "sClass": "text-right", "aTargets": [ 8 ] }
+                    { "sClass": "text-center", "aTargets": [ 8 ] },
+                    { "sClass": "text-right", "aTargets": [ 9 ] }
                     ],
                     "language": {
                         "decimal": "",

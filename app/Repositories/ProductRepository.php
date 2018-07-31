@@ -32,7 +32,7 @@ Class ProductRepository
 		->filter(function ($query) use ($request) {
 			if (trim($request->get('category')) !== "") {
 				$query->join('product_category', 'products.id', '=', 'product_category.product_id')
-					->where('product_category.category_id', $request->get('category'));
+				->where('product_category.category_id', $request->get('category'));
 			}
 			
 			if (trim($request->get('status')) !== "") {
@@ -72,12 +72,14 @@ Class ProductRepository
 		})
 		->addColumn('category', function ($product) {
 			$category = $this->lowestLevelCategory($product->id);
-			return $category->name;
+			return ($category) ? $category->name : "";
 		})
 		->addColumn('name', function($product){
 			$html = '';
 			$html .= '<p>'.$product->name.'</p>';
-			$html .= '<p>'.$product->sizes.'</p>';
+			if ($product->sizes) {
+				$html .= '<p>'.$product->sizes.'</p>';
+			}
 			return $html;
 		})
 		->rawColumns(['category', 'photo', 'status', 'action', 'name'])
