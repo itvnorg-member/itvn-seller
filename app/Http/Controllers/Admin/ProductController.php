@@ -54,6 +54,7 @@ class ProductController extends AdminController
         $this->_data['color_options'] = $product->getColorOptions($id);
         $this->_data['brand_options'] = $product->getBrandOptions($id);
         $this->_data['colors'] = $product->getColors();
+        $this->_data['sizes'] = $product->getSizes();
 
         $this->_pushBreadCrumbs($this->_data['title']);
         return view('admin.products.view', $this->_data);
