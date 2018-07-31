@@ -177,54 +177,15 @@
         synchronize_child_and_parent_category($);
 
 
-        $('input[type="checkbox"]').change(function(e) {
-
-          var checked = $(this).prop("checked"),
-          container = $(this).parent(),
-          siblings = container.siblings();
-
-          container.find('input[type="checkbox"]').prop({
-            indeterminate: false,
-            checked: checked
+        //---> Handling checkbox for categories list
+        $('.list-tree input[type=checkbox]').click(function () {
+            var sibs = false;
+            $(this).closest('ul').children('li').each(function () {
+                if($('input[type=checkbox]', this).is(':checked')) sibs=true;
+            })
+            $(this).parents('ul').prev().prop('checked', sibs);
         });
 
-          function checkSiblings(el) {
-
-            var parent = el.parent().parent(),
-            all = true;
-
-            el.siblings().each(function() {
-              return all = ($(this).children('input[type="checkbox"]').prop("checked") === checked);
-          });
-
-            if (all && checked) {
-
-              parent.children('input[type="checkbox"]').prop({
-                indeterminate: false,
-                checked: checked
-            });
-
-              checkSiblings(parent);
-
-          } else if (all && !checked) {
-
-              parent.children('input[type="checkbox"]').prop("checked", checked);
-              parent.children('input[type="checkbox"]').prop("indeterminate", (parent.find('input[type="checkbox"]:checked').length > 0));
-              checkSiblings(parent);
-
-          } else {
-
-              el.parents("li").children('input[type="checkbox"]').prop({
-            // indeterminate: true,
-            checked: false
-        });
-
-          }
-
-      }
-
-      checkSiblings(container);
-  });
         new Cleave('.input-price', {
             numeral: true,
             numeralThousandsGroupStyle: 'thousand'
