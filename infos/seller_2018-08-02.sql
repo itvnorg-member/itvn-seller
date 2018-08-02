@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-08-02 14:30:19
+Date: 2018-08-02 15:46:50
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -273,7 +273,7 @@ CREATE TABLE `products` (
   `quantity` int(11) unsigned DEFAULT NULL,
   `quantity_available` int(10) unsigned DEFAULT NULL,
   `photo` varchar(255) DEFAULT '',
-  `description` varchar(255) NOT NULL DEFAULT '',
+  `description` varchar(255) DEFAULT '',
   `content` text,
   `active` tinyint(1) DEFAULT '1',
   `order` int(11) unsigned DEFAULT '0',
@@ -285,7 +285,7 @@ CREATE TABLE `products` (
   PRIMARY KEY (`id`),
   KEY `supplier_id` (`supplier_id`),
   KEY `brand_id` (`brand_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of products
@@ -293,6 +293,7 @@ CREATE TABLE `products` (
 INSERT INTO `products` VALUES ('1', null, '1', 'a1', 'asd', 'aaaa', 'xanh,Chọn màu,test', 'size s', '23', '1000', '50', null, null, 'sdfsdf', '<p>sdfsdf</p>', '1', '1', '2018-07-30 05:47:40', '2018-08-02 02:23:47', null, null, null);
 INSERT INTO `products` VALUES ('2', null, null, 'a1', null, 'aaaa1', null, null, '-1111', '12323', '0', null, '', 'sdfsdf', '<p><br></p>', '1', null, '2018-07-30 05:51:07', '2018-07-30 05:51:07', null, null, null);
 INSERT INTO `products` VALUES ('3', null, '1', 'A3L01', 'A3L01000001', 'Áo 3 lỗ', 'xanh,test', 'size s', '50000', '100000', '34', null, 'public/products/51a3d6a058508247296a4d9f302a1866.jpg', 'Áo 3 lỗ', '<p>Áo 3 lỗ<br></p>', '1', '1', '2018-08-02 02:25:38', '2018-08-02 02:28:22', 'haha', 'hehe', 'hihi');
+INSERT INTO `products` VALUES ('4', null, '1', 'A2D', 'A2D001', 'Áo 2 dây', 'xanh', 'size s', '30000', '70000', '11', null, 'public/products/c2e57e7c9cc1f1a51be5ec80c2d7cd8d.jpg', null, '<p><br></p>', '1', null, '2018-08-02 03:46:32', '2018-08-02 03:46:32', 'haha', 'hehe', 'hihi');
 
 -- ----------------------------
 -- Table structure for product_category
@@ -314,6 +315,9 @@ INSERT INTO `product_category` VALUES ('1', '6', '2018-07-30 10:47:40', '2018-07
 INSERT INTO `product_category` VALUES ('3', '5', '2018-08-02 14:25:38', '2018-08-02 14:25:38');
 INSERT INTO `product_category` VALUES ('3', '6', '2018-08-02 14:25:39', '2018-08-02 14:25:39');
 INSERT INTO `product_category` VALUES ('3', '1', '2018-08-02 14:25:39', '2018-08-02 14:25:39');
+INSERT INTO `product_category` VALUES ('4', '5', '2018-08-02 15:46:32', '2018-08-02 15:46:32');
+INSERT INTO `product_category` VALUES ('4', '6', '2018-08-02 15:46:32', '2018-08-02 15:46:32');
+INSERT INTO `product_category` VALUES ('4', '1', '2018-08-02 15:46:32', '2018-08-02 15:46:32');
 
 -- ----------------------------
 -- Table structure for product_detail
@@ -332,7 +336,7 @@ CREATE TABLE `product_detail` (
   KEY `product_id_2` (`product_id`),
   KEY `color_id` (`color_id`),
   KEY `size_id` (`size_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of product_detail
@@ -342,6 +346,7 @@ INSERT INTO `product_detail` VALUES ('11', '1', '0', '1', '10', '2018-08-02 02:2
 INSERT INTO `product_detail` VALUES ('12', '1', '2', '1', '8', '2018-08-02 02:23:47', '2018-08-02 02:23:47');
 INSERT INTO `product_detail` VALUES ('13', '3', '1', '1', '11', '2018-08-02 02:25:39', '2018-08-02 02:25:39');
 INSERT INTO `product_detail` VALUES ('14', '3', '2', '1', '23', '2018-08-02 02:25:39', '2018-08-02 02:25:39');
+INSERT INTO `product_detail` VALUES ('15', '4', '1', '1', '11', '2018-08-02 03:46:32', '2018-08-02 03:46:32');
 
 -- ----------------------------
 -- Table structure for product_photos
@@ -360,7 +365,7 @@ CREATE TABLE `product_photos` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of product_photos
@@ -370,6 +375,7 @@ INSERT INTO `product_photos` VALUES ('17', '1', '1', 'public/product_photos/a6e9
 INSERT INTO `product_photos` VALUES ('18', '3', '2', 'public/product_photos/b38be8d8e7dc6626353b7030e37c958c.jpg', '', '', null, '1', '0', '2018-08-02 02:25:39', '2018-08-02 02:25:39');
 INSERT INTO `product_photos` VALUES ('19', '3', 'default-logo-ecep.png', 'public/product_photos/e78aa6ef2d973419d6deb110193c5b8b.png', '', '', '1', '1', '1', '2018-08-02 02:25:39', '2018-08-02 02:25:39');
 INSERT INTO `product_photos` VALUES ('20', '3', 'logo-ecep.png', 'public/product_photos/087c7fc9fa0cc49ed5f91d5c786cca37.png', '', '', '2', '1', '2', '2018-08-02 02:25:39', '2018-08-02 02:25:39');
+INSERT INTO `product_photos` VALUES ('21', '4', 'course-default-img-min.jpg', 'public/product_photos/661130aca4f16f8126a272bea04241d9.jpg', '', '', '1', '1', '1', '2018-08-02 03:46:32', '2018-08-02 03:46:32');
 
 -- ----------------------------
 -- Table structure for roles
