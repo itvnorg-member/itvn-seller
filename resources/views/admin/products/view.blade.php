@@ -147,7 +147,7 @@
         });
         html_detail_size_option += '</select>';
 
-        var html_detail_input_quantity = '<input type="number" value="'+data['quantity']+'" id="detail_quantity_'+key+'" class="detail_quantity" >';
+        var html_detail_input_quantity = '<input type="number" min="0" value="'+data['quantity']+'" id="detail_quantity_'+key+'" class="detail_quantity" >';
 
         var html = '<td>'+html_detail_color_option+'</td><td>'+html_detail_size_option+'</td><td class="c-quantity">'+html_detail_input_quantity+'</td><td><a href="javascript:;" onclick="deleteProductInfoItem('+key+');">Xóa</a></td>';
         return html;
