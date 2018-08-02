@@ -221,7 +221,7 @@
 
     }
 
-    $('.validate-ajax').change(function(){
+    $('.validate-ajax').focusout(function(){
         var value = $(this).val();
         var name = $(this).attr('name');
         $.ajax({
@@ -234,14 +234,18 @@
 
         }).done(function(data) {
             if (data == false) {
-                swal({
-                    title: "Cảnh Báo!",
-                    text: "Tên/mã này đã tồn tại, xin hãy chọn tên/mã khác",
-                    html:true,
-                    type: "warning",
-                    confirmButtonText: "Đã biết",
-                    closeOnConfirm: false
-                });
+                // swal({
+                //     title: "Cảnh Báo!",
+                //     text: "Tên/mã này đã tồn tại, xin hãy chọn tên/mã khác",
+                //     html:true,
+                //     type: "warning",
+                //     confirmButtonText: "Đã biết",
+                //     closeOnConfirm: false
+                // });
+                var valMessage = 'Tên/mã này đã tồn tại, xin hãy chọn tên/mã khác';
+                var elInputName = $("input[name='name']");
+                elInputName.after('<label id="name-error" class="error error-product-name" for="name">'+valMessage+'</label>');
+                elInputName.addClass("error");
             }
         })
     });
