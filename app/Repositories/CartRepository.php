@@ -11,7 +11,7 @@ namespace App\Repositories;
 use App\Models\Cart;
 use App\Models\CartDetail;
 use App\Models\Customer;
-use App\Models\Provider;
+use App\Models\Supplier;
 use App\Models\Product;
 use Illuminate\Support\Facades\Cache;
 use Yajra\DataTables\Facades\DataTables;
@@ -22,8 +22,11 @@ Class CartRepository
 	const CACHE_NAME_CART = 'carts';
 	public function dataTable($request)
 	{
-		$carts = Cart::select(['carts.id', 'carts.city_id', 'carts.partner_id', 'carts.customer_id', 'carts.code', 'carts.quantity', 'carts.status', 'carts.active', 'carts.created_at', 'customers.name as customer_name', 'customers.phone as customer_phone'])
-		->join('customers', 'customers.id', '=', 'carts.customer_id');
+		$carts = Cart::select(['carts.id', 'carts.city_id', 'carts.partner_id', 'carts.customer_id', 'carts.code', 'carts.quantity', 'carts.status', 'carts.active', 'carts.created_at', 'customers.name as customer_name', 'customers.phone as customer_phone', 'cart_detail.product_id', 'suppliers.name as supplier_name'])
+		->join('customers', 'customers.id', '=', 'carts.customer_id')
+		->join('cart_detail', 'cart_detail.cart_id', '=', 'carts.id')
+		->join('products', 'products.id', '=', 'cart_detail.product_id')
+		->join('suppliers', 'suppliers.id', '=', 'products.supplier_id');
 
 		$dataTable = DataTables::eloquent($carts)
 		->filter(function ($query) use ($request) {
