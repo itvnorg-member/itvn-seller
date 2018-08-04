@@ -66,10 +66,12 @@
 
             </nav>
         </div>
+        @if(!isset($hasSidebar) || $hasSidebar == true)
         @include('admin._partials._sidebar')
+        @endif
 
         <div id="page-wrapper" class="gray-bg">
-
+            @if(!isset($hasTitle) || $hasTitle == true)
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
                     @if (isset($title))
@@ -78,6 +80,7 @@
                     @include('admin._partials._breadcrumbs')
                 </div>
             </div>
+            @endif
             <div class="wrapper wrapper-content animated fadeInRight">
                 @yield('content')
             </div>

@@ -2,6 +2,16 @@
 
 @section('title', $title)
 
+@section('css')
+<style type="text/css">
+@media (min-width: 768px){
+    #page-wrapper {
+        margin: 0 0 0 0px;
+    }
+}
+</style>
+@endsection
+
 @section('js')
 <!-- Page-Level Scripts -->
 <script>
@@ -24,25 +34,82 @@
                 @if (isset($data->id))
                 <input type="hidden" name="id" value="{{$data->id}}" />
                 @endif
-                <div class="ibox-content">
-                    <div class="row">
-                        <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="ibox-content">
+
                             <div class="row">
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">Tên danh mục (<span class="text-danger">*</span>)</label>
-                                    <div class="col-md-5">
-                                        <input type="text" name="name" placeholder="" class="form-control required m-b" value="@if(isset($data->name)){{$data->name}}@else{{old('name')}}@endif"/>
-                                    </div>
+                                <div class="col-md-12">
+                                    <h2>{{ $title }}</h2>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <select name="product_name" class="form-control">
+                                        <option value="0"> -- Chọn sản phẩm -- </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <select name="product_color" class="form-control">
+                                        <option value="0"> -- Chọn màu sắc -- </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <select name="product_size" class="form-control">
+                                        <option value="0"> -- Chọn kích thước -- </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" name="quantity" placeholder="Nhập số lượng" class="form-control m-b"
+                                        value=""/>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-success pull-left c-add-info" id="add_cart_details">Thêm</button>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">Danh mục cha</label>
-                                    <div class="col-md-5">
-                                        <select class="form-control m-b" name="parent_id">
-                                            <option value="0">Chọn danh mục cha</option>
-                                            {!! $cartsTree !!}
+                                    <div class="col-md-12">
+                                        <table id="i-cart-info" class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Hình ảnh</th>
+                                                    <th>Tên sản phẩm</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Mã sản phẩm</th>
+                                                    <th>Size</th>
+                                                    <th>Giá</th>
+                                                    <th>Giá tùy chỉnh</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                            <tfoot>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="ibox-content">
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h2>Thông tin khách hàng</h2>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Số điện thoại (<span class="text-danger">*</span>)</label>
+                                    <div class="col-md-8">
+                                        <select name="customer_phone" class="form-control required m-b">
+                                            <option value="" selected>-- Chọn số điện thoại --</option>
                                         </select>
                                     </div>
                                 </div>
@@ -50,48 +117,213 @@
 
                             <div class="row">
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">Mô tả</label>
-                                    <div class="col-md-5">
-                                        <textarea name="description" id="" cols="30" rows="10"  class="form-control m-b">@if(isset($data->description)){{$data->description}}@else{{old('description')}}@endif</textarea>
+                                    <label class="col-md-4 control-label">Tên khách hàng (<span class="text-danger">*</span>)</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="customer_name" placeholder="" class="form-control required m-b"
+                                        value=""/>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">Thứ tự</label>
-                                    <div class="col-md-5">
-                                        <input type="text" name="order" placeholder="" class="form-control m-b" value="@if(isset($data->order)){{$data->order}}@else{{old('order')}}@endif"/>
+                                    <label class="col-md-4 control-label">Email</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="customer_email" placeholder="" class="form-control m-b"
+                                        value=""/>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">Trạng thái</label>
-                                    <div class="col-md-3">
-                                        <select class="form-control" name="active">
-                                            <option @if(isset($data->active) && $data->active === ACTIVE || old('active') === ACTIVE) selected @endif value="{{ACTIVE}}">Đã kích hoạt</option>
-                                            <option @if(isset($data->active) && $data->active === INACTIVE || old('active') === INACTIVE) selected @endif value="{{INACTIVE}}">Chưa kích hoạt</option>
+                                    <label class="col-md-4 control-label">Địa chỉ (<span class="text-danger">*</span>)</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="customer_address" placeholder="" class="form-control required m-b"
+                                        value=""/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Thành phố (<span class="text-danger">*</span>)</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="customer_city" placeholder="" class="form-control required m-b"
+                                        value=""/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h2>Thông tin khác</h2>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Dịch vụ vận chuyển</label>
+                                    <div class="col-md-8">
+                                        <select name="transporting_service" class="form-control m-b">
+                                            <option value="" selected>-- Chọn dịch vụ vận chuyển --</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <h5>Danh mục sản phẩm</h5>
-                            <div class="list-tree-section m-b">
-                                {!! $cartsTreeList !!}
-                            </div>
-                        </div>
 
-                        <div class="col-md-12">
-                            <div class="text-right">
-                                <a href="{{route('admin.carts.index')}}" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Trở lại</a>
-                                <button type="button" class="btn btn-default" id="bt-reset"><i class="fa fa-refresh"></i> Làm mới</button>
-                                <button type="submit" name="action" class="btn btn-primary" value="save"><i class="fa fa-save"></i> Lưu</button>
-                                <button type="submit" name="action" class="btn btn-warning" value="save_quit"><i class="fa fa-save"></i> Lưu &amp; Thoát</button>
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Phí vận chuyển</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="shipping_fee" placeholder="" class="form-control m-b"
+                                        value=""/>
+                                    </div>
+                                </div>
                             </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Cộng tác viên</label>
+                                    <div class="col-md-8">
+                                        <select name="partner" class="form-control m-b">
+                                            <option value="" selected>-- Chọn cộng tác viên --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Chiết khấu cộng tác viên</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="partner_discount_percent" placeholder="" class="form-control m-b"
+                                        value="" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Chiết khấu khách hàng</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="customer_discount_percent" placeholder="" class="form-control m-b"
+                                        value="" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Thuế</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="vat_percent" placeholder="" class="form-control m-b"
+                                        value="10%" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Khách hàng trả trước</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="prepaid" placeholder="" class="form-control m-b"
+                                        value="" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Ghi chú</label>
+                                    <div class="col-md-8">
+                                        <textarea class="form-control" name="notes"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 40px;"></div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Tổng cộng</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="total_amount" placeholder="" class="form-control m-b"
+                                        value="" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Trả trước</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="prepaid" placeholder="" class="form-control m-b"
+                                        value="" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Tổng số lượng</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="total_quantity" placeholder="" class="form-control m-b"
+                                        value="" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Phí vận chuyển</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="shipping_fee" placeholder="" class="form-control m-b"
+                                        value="" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Thuế</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="vat_amount" placeholder="" class="form-control m-b"
+                                        value="10%" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Tổng chiết khấu</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="total_discount_amount" placeholder="" class="form-control m-b"
+                                        value="" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Thành tiền</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="price" placeholder="" class="form-control m-b"
+                                        value="" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="text-right">
+                                        <button type="button" class="btn btn-default" id="bt-reset"><i class="fa fa-refresh"></i> Làm mới</button>
+                                        <button type="submit" name="action" class="btn btn-success" value="save"><i class="fa fa-save"></i> Lưu</button>
+                                        <button type="submit" name="action" class="btn btn-primary" value="save_quit"><i class="fa fa-save"></i> Lưu &amp; In</button>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

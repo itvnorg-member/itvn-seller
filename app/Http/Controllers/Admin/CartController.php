@@ -35,15 +35,12 @@ class CartController extends AdminController
     {
         $id = $this->_request->get('id');
         $this->_data['title'] = 'Tạo mới đơn hàng';
+        $this->_data['hasSidebar'] = false;
+        $this->_data['hasTitle'] = false;
         if ($id) {
             $this->_data['title'] = 'Chỉnh sửa đơn hàng';
             $this->_data['data'] = $cart->getCart($id);
         }
-
-        $this->_data['cartsTreeList'] = make_list_hierarchy_no_checkbox($cart->getcartsTree());
-
-        $parent_id = ($id) ? $cart->getCart($id)->parent_id : 0;
-        $this->_data['cartsTree'] = option_menu($cart->getcartsTree(), "", $parent_id);
 
         $this->_pushBreadCrumbs($this->_data['title']);
         return view('admin.carts.view', $this->_data);

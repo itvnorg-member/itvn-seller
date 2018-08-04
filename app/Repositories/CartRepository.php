@@ -46,4 +46,10 @@ Class CartRepository
 		->toJson();
 		return $dataTable;
 	}
+
+	public function getProduct($id)
+	{
+		$data = Cart::find($id);
+		return $data;
+	}
 }
