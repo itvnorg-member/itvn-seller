@@ -30,7 +30,29 @@ Class CartRepository
 
 		$dataTable = DataTables::eloquent($carts)
 		->filter(function ($query) use ($request) {
+			if (trim($request->get('code')) !== "") {
+                $query->where(function ($sub) use ($request) {
+                    $sub->where('carts.code', 'like', '%' . $request->get('code') . '%');
+                });
+            }
 
+            if (trim($request->get('customer_name')) !== "") {
+                $query->where(function ($sub) use ($request) {
+                    $sub->where('customers.name', 'like', '%' . $request->get('customer_name') . '%');
+                });
+            }
+
+            if (trim($request->get('customer_phone')) !== "") {
+                $query->where(function ($sub) use ($request) {
+                    $sub->where('customers.phone', 'like', '%' . $request->get('customer_phone') . '%');
+                });
+            }
+
+            if (trim($request->get('supplier_name')) !== "") {
+                $query->where(function ($sub) use ($request) {
+                    $sub->where('suppliers.name', 'like', '%' . $request->get('supplier_name') . '%');
+                });
+            }
 			
 		}, true)
 		->addColumn('created_at', function ($cart) {
@@ -62,7 +84,6 @@ Class CartRepository
 		->join('transports', 'transports.id', '=', 'carts.transport_id')
 		->where('carts.code', '=', $cartCode)
 		->first();
-		//$cart->created_at->format('H:i d/m/Y'); //= date_format($cart->created_at,"H:i d/m/Y");
 		return $cart;
 	}
 

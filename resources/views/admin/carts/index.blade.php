@@ -77,7 +77,10 @@
             ajax: {
                 "url": "{{route('admin.carts.index')}}",
                 "data": function (d) {
-                    d.keyword = $('#s-keyword').val();
+                    d.code = $('#s-code').val();
+                    d.customer_name = $('#s-customer-name').val();
+                    d.customer_phone = $('#s-customer-phone').val();
+                    d.supplier_name = $('#s-supplier-name').val();
                     d.status = $('#s-status').val();
                 },
                 complete: function () {
@@ -268,24 +271,24 @@ $("#dataTables").on("click", '.bt-delete', function () {
             <div class="col-sm-2 pr-0">
                 <div class="form-group">
                     <label>Mã đơn hàng</label>
-                    <input type="text" placeholder="Nhập mã" name="keyword" id="s-keyword" class="form-control"
-                    value="{{app('request')->input('keyword')}}">
+                    <input type="text" placeholder="Nhập mã" name="code" id="s-code" class="form-control"
+                    value="{{app('request')->input('code')}}">
                 </div>
             </div>
 
             <div class="col-sm-2 pr-0 pl-10">
                 <div class="form-group">
                     <label>Tên khách hàng</label>
-                    <input type="text" placeholder="Nhập tên" name="keyword" id="s-keyword" class="form-control"
-                    value="{{app('request')->input('keyword')}}">
+                    <input type="text" placeholder="Nhập tên" name="customer_name" id="s-customer-name" class="form-control"
+                    value="{{app('request')->input('customer_name')}}">
                 </div>
             </div>
 
             <div class="col-sm-2 pr-0 pl-10">
                 <div class="form-group">
                     <label>Điện thoại</label>
-                    <input type="text" placeholder="Điện thoại" name="keyword" id="s-keyword" class="form-control"
-                    value="{{app('request')->input('keyword')}}">
+                    <input type="text" placeholder="Điện thoại" name="customer_phone" id="s-customer-phone" class="form-control"
+                    value="{{app('request')->input('customer_phone')}}">
                 </div>
             </div>
 
@@ -303,8 +306,8 @@ $("#dataTables").on("click", '.bt-delete', function () {
             <div class="col-sm-2 pr-0 pl-10">
                 <div class="form-group">
                     <label>Nguồn đơn</label>
-                    <input type="text" placeholder="Nguồn đơn" name="keyword" id="s-keyword" class="form-control"
-                    value="{{app('request')->input('keyword')}}">
+                    <input type="text" placeholder="Nguồn đơn" name="supplier_name" id="s-supplier-name" class="form-control"
+                    value="{{app('request')->input('supplier_name')}}">
                 </div>
             </div>
 

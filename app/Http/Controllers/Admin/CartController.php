@@ -111,7 +111,6 @@ class CartController extends AdminController
     public function getCartDetail(CartRepository $cart){
         $cartCode = $this->_request->get('cart_code');
         $result = $cart->getCartDetail($cartCode);
-        // $result->created_at = date_format($result->created_at,"H:i d/m/Y");
         return response()->json([
             'success' => true,
             'result' => $result
