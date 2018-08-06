@@ -26,7 +26,7 @@
        if (day.length < 2) day = '0' + day;
 
        return [hour, minute].join(':')+' '+[day, month, year].join('/');
-    }
+   }
 
     //---> Get customer detail, cart detail
     function getRecordDetail(){
@@ -39,18 +39,25 @@
                 },
                 dataType:'json'
             }).done(function(data) {
-                // console.log(data);
+                // console.log(data.result["cart_detail"]);
                 if (!$.isEmptyObject(data.result)) {
-                    $("#customer_name").text(data.result.customer_name);
-                    $("#customer_phone").text(data.result.customer_phone);
-                    $("#customer_email").text(data.result.customer_email);
-                    $("#customer_address").text(data.result.customer_address);
-                    var dateFormat = formatDate(data.result.created_at);
+                    $("#customer_name").text(data.result["cart"].customer_name);
+                    $("#customer_phone").text(data.result["cart"].customer_phone);
+                    $("#customer_email").text(data.result["cart"].customer_email);
+                    $("#customer_address").text(data.result["cart"].customer_address);
+                    var dateFormat = formatDate(data.result["cart"].created_at);
                     $("#cart_created").text(dateFormat);
-                    $("#supplier_name").text(data.result.supplier_name);
-                    $("#transport_name").text(data.result.transport_name);
-                    $("#transport_id").text(data.result.transport_id);
-                    $("#code").text(data.result.code);
+                    $("#supplier_name").text(data.result["cart"].supplier_name);
+                    $("#transport_name").text(data.result["cart"].transport_name);
+                    $("#transport_id").text(data.result["cart"].transport_id);
+                    $("#code").text(data.result["cart"].code);
+                    var htmlTable = parseTableCartDetail(data.result["cart_detail"]);
+                    // console.log(htmlTable);
+                    $('.cart-detail-wrapper').html(htmlTable);
+                    // console.log(getSummaryCart(data.result["cart_detail"]));
+                    $('.c-total-money').text(getSummaryCart(data.result["cart_detail"])['total_price'].toLocaleString() + ' đ');
+                    $('.c-shipping-fee').text(getSummaryCart(data.result["cart_detail"])['shipping_fee'].toLocaleString() + ' đ');
+                    $('.c-amount').text(getSummaryCart(data.result["cart_detail"])['amount'].toLocaleString() + ' đ');
                 }else{
                     console.log('Data is null');
                 }
@@ -61,11 +68,44 @@
         });
     }
 
+    function parseTableCartDetail(arrCartDetails){
+        var html = '';
+
+        if (arrCartDetails.length > 0) {
+            $.each(arrCartDetails, function( index, value ) {
+              html += '<tr>'
+              +'<td>'+value['barcode']+'</td>'
+              +'<td>'+value['product_code']+'</td>'
+              +'<td>'+value['price']+'</td>'
+              +'<td>'+value['quantity']+'</td>'
+              +'</tr>';
+          });
+        }
+
+        return html;
+    }
+
+    function getSummaryCart(arrCartDetails){
+        var totalPrice = 0;
+        var shippingFee = 0;
+        var amount = 0;
+        totalPrice = arrCartDetails[0]["total_price"];
+        shippingFee = arrCartDetails[0]["shipping_fee"];
+        amount = parseFloat(totalPrice) + parseFloat(shippingFee);
+        var objSummary = {
+            total_price: totalPrice,
+            shipping_fee: shippingFee,
+            amount: amount
+        };
+        return objSummary;
+    }
+
     $(document).ready(function () {
         $('#date_range_picker').datepicker({
             keyboardNavigation: false,
             forceParse: false,
-            autoclose: true
+            autoclose: true,
+            format: 'dd/mm/yyyy'
         });
 
 
@@ -82,6 +122,9 @@
                     d.customer_phone = $('#s-customer-phone').val();
                     d.supplier_name = $('#s-supplier-name').val();
                     d.status = $('#s-status').val();
+                    d.start_date = $('input[name=start]').val();
+                    d.end_date = $('input[name=end]').val();
+                    console.log($('input[name=start]').val());
                 },
                 complete: function () {
                     var inputStatus = document.querySelectorAll('.js-switch');
@@ -296,9 +339,9 @@ $("#dataTables").on("click", '.bt-delete', function () {
                 <div class="form-group">
                     <label>Ngày bán</label>
                     <div class="input-daterange input-group" id="date_range_picker">
-                        <input type="text" class="input-sm form-control" name="start" value="05/14/2014">
+                        <input type="text" class="input-sm form-control" name="start" value="">
                         <span class="input-group-addon lbl-to">to</span>
-                        <input type="text" class="input-sm form-control" name="end" value="05/22/2014">
+                        <input type="text" class="input-sm form-control" name="end" value="">
                     </div>
                 </div>
             </div>
@@ -373,7 +416,7 @@ $("#dataTables").on("click", '.bt-delete', function () {
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 pl-0">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="text-left">
@@ -441,7 +484,34 @@ $("#dataTables").on("click", '.bt-delete', function () {
                             <h3 class="text-uppercase">thông tin đơn hàng</h3>
                         </div>
                         <div class="hr-line-dashed"></div>
-
+                        <div class="ibox-content m-b">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Mã barcode</th>
+                                        <th>Mã sản phẩm</th>
+                                        <th>Đơn giá</th>
+                                        <th>Số lượng</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3">Tổng cộng</td>
+                                        <td><span class="c-total-money"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">Phí vận chuyển</td>
+                                        <td><span class="c-shipping-fee"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" style="font-weight: 700;">Thành tiền</td>
+                                        <td><span class="c-amount"></span></td>
+                                    </tr>
+                                </tfoot>
+                                <tbody class="cart-detail-wrapper">
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10 text-right">
                                 <button class="btn btn-sm btn-primary" type="submit">Lưu</button>

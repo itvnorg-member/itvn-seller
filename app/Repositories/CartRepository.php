@@ -31,28 +31,34 @@ Class CartRepository
 		$dataTable = DataTables::eloquent($carts)
 		->filter(function ($query) use ($request) {
 			if (trim($request->get('code')) !== "") {
-                $query->where(function ($sub) use ($request) {
-                    $sub->where('carts.code', 'like', '%' . $request->get('code') . '%');
-                });
-            }
+				$query->where(function ($sub) use ($request) {
+					$sub->where('carts.code', 'like', '%' . $request->get('code') . '%');
+				});
+			}
 
-            if (trim($request->get('customer_name')) !== "") {
-                $query->where(function ($sub) use ($request) {
-                    $sub->where('customers.name', 'like', '%' . $request->get('customer_name') . '%');
-                });
-            }
+			if (trim($request->get('customer_name')) !== "") {
+				$query->where(function ($sub) use ($request) {
+					$sub->where('customers.name', 'like', '%' . $request->get('customer_name') . '%');
+				});
+			}
 
-            if (trim($request->get('customer_phone')) !== "") {
-                $query->where(function ($sub) use ($request) {
-                    $sub->where('customers.phone', 'like', '%' . $request->get('customer_phone') . '%');
-                });
-            }
+			if (trim($request->get('customer_phone')) !== "") {
+				$query->where(function ($sub) use ($request) {
+					$sub->where('customers.phone', 'like', '%' . $request->get('customer_phone') . '%');
+				});
+			}
 
-            if (trim($request->get('supplier_name')) !== "") {
-                $query->where(function ($sub) use ($request) {
-                    $sub->where('suppliers.name', 'like', '%' . $request->get('supplier_name') . '%');
-                });
-            }
+			if (trim($request->get('supplier_name')) !== "") {
+				$query->where(function ($sub) use ($request) {
+					$sub->where('suppliers.name', 'like', '%' . $request->get('supplier_name') . '%');
+				});
+			}
+
+			if (trim($request->get('start_date')) !== "") {
+				$query->where(function ($sub) use ($request) {
+					// $sub->whereBetween('carts.created_at', [$request->get('start_date'), $request->get('end_date')] );
+				});
+			}
 			
 		}, true)
 		->addColumn('created_at', function ($cart) {
@@ -84,7 +90,20 @@ Class CartRepository
 		->join('transports', 'transports.id', '=', 'carts.transport_id')
 		->where('carts.code', '=', $cartCode)
 		->first();
-		return $cart;
+
+		$cartDetails = Cart::select(['carts.id', 'cart_detail.quantity as quantity', 'cart_detail.price as price', 'carts.total_price as total_price', 'carts.shipping_fee as shipping_fee', 'products.barcode as barcode', 'products.code as product_code', ])
+		->join('cart_detail', 'cart_detail.cart_id', '=', 'carts.id')
+		->join('products', 'products.id', '=', 'cart_detail.product_id')
+		->where('carts.code', '=', $cartCode)
+
+		->get();
+
+		$cartResult = array(
+			"cart" => $cart,
+			"cart_detail" => $cartDetails
+		);
+
+		return $cartResult;
 	}
 
 }
