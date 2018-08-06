@@ -40,7 +40,7 @@
                 dataType:'json'
             }).done(function(data) {
                 // console.log(data.result["cart_detail"]);
-                if (!$.isEmptyObject(data.result)) {
+                if (!$.isEmptyObject(data.result["cart"])) {
                     $("#customer_name").text(data.result["cart"].customer_name);
                     $("#customer_phone").text(data.result["cart"].customer_phone);
                     $("#customer_email").text(data.result["cart"].customer_email);
@@ -125,6 +125,7 @@
                     d.start_date = $('input[name=start]').val();
                     d.end_date = $('input[name=end]').val();
                     console.log($('input[name=start]').val());
+                    console.log($('input[name=end]').val());
                 },
                 complete: function () {
                     var inputStatus = document.querySelectorAll('.js-switch');

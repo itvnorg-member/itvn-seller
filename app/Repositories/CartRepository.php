@@ -28,6 +28,7 @@ Class CartRepository
 		->join('products', 'products.id', '=', 'cart_detail.product_id')
 		->join('suppliers', 'suppliers.id', '=', 'products.supplier_id');
 
+
 		$dataTable = DataTables::eloquent($carts)
 		->filter(function ($query) use ($request) {
 			if (trim($request->get('code')) !== "") {
@@ -56,7 +57,13 @@ Class CartRepository
 
 			if (trim($request->get('start_date')) !== "") {
 				$query->where(function ($sub) use ($request) {
-					// $sub->whereBetween('carts.created_at', [$request->get('start_date'), $request->get('end_date')] );
+					$sub->where('carts.created_at', '>=', date_create($request->get('start_date')) );
+				});
+			}
+
+			if (trim($request->get('end_date')) !== "") {
+				$query->where(function ($sub) use ($request) {
+					$sub->where('carts.created_at', '<=', date_create($request->get('end_date')));
 				});
 			}
 			
