@@ -39,7 +39,7 @@
                 },
                 dataType:'json'
             }).done(function(data) {
-                // console.log(data.result["cart_detail"]);
+                console.log(data.result["cart"].status);
                 if (!$.isEmptyObject(data.result["cart"])) {
                     $("#customer_name").text(data.result["cart"].customer_name);
                     $("#customer_phone").text(data.result["cart"].customer_phone);
@@ -58,6 +58,7 @@
                     $('.c-total-money').text(getSummaryCart(data.result["cart_detail"])['total_price'].toLocaleString() + ' đ');
                     $('.c-shipping-fee').text(getSummaryCart(data.result["cart_detail"])['shipping_fee'].toLocaleString() + ' đ');
                     $('.c-amount').text(getSummaryCart(data.result["cart_detail"])['amount'].toLocaleString() + ' đ');
+                    $('#i-status-list').val(data.result["cart"].status);
                 }else{
                     console.log('Data is null');
                 }
@@ -360,11 +361,17 @@ $("#dataTables").on("click", '.bt-delete', function () {
                     <label>Tình trạng</label>
                     <select class="form-control" name="status" id="s-status">
                         <option value=""> -- Tất cả --</option>
-                        <option @if(app('request')->has('status') && app('request')->input('status') == ACTIVE) selected
-                            @endif value="{{ACTIVE}}">Đã kích hoạt
+                        <option @if(app('request')->has('status') && app('request')->input('status') == CART_NEW) selected
+                            @endif value="{{CART_NEW}}">Mới
                         </option>
-                        <option @if(app('request')->has('status') && app('request')->input('status') == INACTIVE) selected
-                            @endif value="{{INACTIVE}}">Chưa kích hoạt
+                        <option @if(app('request')->has('status') && app('request')->input('status') == CART_COMPLETE) selected
+                            @endif value="{{CART_COMPLETE}}">Hoàn thành
+                        </option>
+                        <option @if(app('request')->has('status') && app('request')->input('status') == CART_IN_PROGRESS) selected
+                            @endif value="{{CART_IN_PROGRESS}}">Đang giao
+                        </option>
+                        <option @if(app('request')->has('status') && app('request')->input('status') == CART_CANCELED) selected
+                            @endif value="{{CART_CANCELED}}">Đã hủy
                         </option>
                     </select>
                 </div>
@@ -473,10 +480,11 @@ $("#dataTables").on("click", '.bt-delete', function () {
                         <div class="form-group">
                             <label class="col-lg-5 control-label" style="text-align: left; padding-right: 0; width: 33.666667%;">Tình trạng:</label>
                             <div class="col-lg-7" style="padding-left: 0; text-align: left;">
-                                <select class="form-control m-b" name="status">
-                                    <option>Hoàn thành</option>
-                                    <option>Đang giao</option>
-                                    <option>Chưa giao</option>
+                                <select id="i-status-list" class="form-control m-b" name="status">
+                                    <option value="{{CART_NEW}}">Mới</option>
+                                    <option value="{{CART_IN_PROGRESS}}">Đang giao</option>
+                                    <option value="{{CART_COMPLETE}}">Hoàn thành</option>
+                                    <option value="{{CART_CANCELED}}">Đã hủy</option>
                                 </select>
                             </div>
                         </div>

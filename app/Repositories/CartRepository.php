@@ -73,8 +73,7 @@ Class CartRepository
 			return $html;
 		})
 		->addColumn('status', function ($cart) {
-			$html = '';
-			$html .= '<span class="label label-success">'.$cart->status.'</span>';
+			$html = parse_status($cart->status);
 			return $html;
 		})
 		->rawColumns(['created_at', 'status'])

@@ -112,3 +112,29 @@ function array_to_string($array){
 	$return = rtrim($return, ',');
 	return $return;
 }
+
+function parse_status($status){
+	$status_parsed = '';
+	switch ($status) {
+		case CART_NEW:
+			$status_parsed = '<span class="label label-info">'.'Mới'.'</span>';
+			break;
+
+		case CART_COMPLETE:
+			$status_parsed = '<span class="label label-success">'.'Hoàn thành'.'</span>';
+			break;
+
+		case CART_IN_PROGRESS:
+			$status_parsed = '<span class="label label-warning">'.'Đang giao'.'</span>';
+			break;
+
+		case CART_CANCELED:
+			$status_parsed = '<span class="label label-danger">'.'Đã hủy'.'</span>';
+			break;
+		
+		default:
+			$status_parsed = '<span class="label label-info">'.'Không có tình trạng'.'</span>';
+			break;
+	}
+	return $status_parsed;
+}
