@@ -245,24 +245,24 @@ Class CartRepository
 				$modelDetail = CartDetail::find($detail->id);
 				if ($modelDetail) {
 					if (!isset($detail->delete) || $detail->delete != true) {
-						$modelDetail->product_id = ($detail->product_name) ? $detail->product_name->id : 0;
-						$modelDetail->product_detail_id = ($detail->product_detail) ? $detail->product_detail->id : 0;
-						$modelDetail->quantity = ($detail->product_quantity) ? $detail->product_quantity : 0;
-						// $modelDetail->discount_amount = ($detail->discount_amount) ? $detail->discount_amount : 0;
-						$modelDetail->price = ($detail->product_price) ? $detail->product_price : 0;
-						$modelDetail->total_price = ($detail->total_price) ? $detail->total_price : 0;
+						$modelDetail->product_id = (isset($detail->product_name)) ? $detail->product_name->id : 0;
+						$modelDetail->product_detail_id = (isset($detail->product_detail)) ? $detail->product_detail->id : 0;
+						$modelDetail->quantity = (isset($detail->product_quantity)) ? $detail->product_quantity : 0;
+						$modelDetail->discount_amount = (isset($detail->discount_amount)) ? $detail->discount_amount : 0;
+						$modelDetail->price = (isset($detail->product_price)) ? $detail->product_price : 0;
+						$modelDetail->total_price = (isset($detail->total_price)) ? $detail->total_price : 0;
 						$modelDetail->save();
 					}
 				}
 			}else{
 				if (!isset($detail->delete) || $detail->delete != true) {
 					$modelDetail = new CartDetail([
-						'product_id' => ($detail->product_name) ? $detail->product_name->id : 0,
-						'product_detail_id' => ($detail->product_detail) ? $detail->product_detail->id : 0,
-						'quantity' => ($detail->product_quantity) ? $detail->product_quantity : 0,
-						// 'discount_amount' => ($detail->discount_amount) ? $detail->discount_amount : 0,
-						'price' => ($detail->product_price) ? $detail->product_price : 0,
-						'total_price' => ($detail->total_price) ? $detail->total_price : 0,
+						'product_id' => (isset($detail->product_name)) ? $detail->product_name->id : 0,
+						'product_detail_id' => (isset($detail->product_detail)) ? $detail->product_detail->id : 0,
+						'quantity' => (isset($detail->product_quantity)) ? $detail->product_quantity : 0,
+						'discount_amount' => (isset($detail->discount_amount)) ? $detail->discount_amount : 0,
+						'price' => (isset($detail->product_price)) ? $detail->product_price : 0,
+						'total_price' => (isset($detail->total_price)) ? $detail->total_price : 0,
 					]);
 					$model->details()->save($modelDetail);
 				}
