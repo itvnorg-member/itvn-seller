@@ -128,27 +128,27 @@ function parse_status($status){
 	$status_parsed = '';
 	switch ($status) {
 		case EXCUTING:
-			$status_parsed = '<span class="label label-primary">'.'Chưa giao'.'</span>';
+			$status_parsed = '<span class="label label-primary">'.EXCUTING_TEXT.'</span>';
 			break;
 
 		case TRANSPORTING:
-			$status_parsed = '<span class="label label-info">'.'Đang giao'.'</span>';
+			$status_parsed = '<span class="label label-info">'.TRANSPORTING_TEXT.'</span>';
 			break;
 
 		case TRANSPORTED:
-			$status_parsed = '<span class="label label-warning">'.'Đã giao'.'</span>';
+			$status_parsed = '<span class="label label-warning">'.TRANSPORTED_TEXT.'</span>';
 			break;
 
 		case COMPLETED:
-			$status_parsed = '<span class="label label-success">'.'Đã hoàn tất'.'</span>';
+			$status_parsed = '<span class="label label-success">'.COMPLETED_TEXT.'</span>';
 			break;
 
 		case CANCELED:
-			$status_parsed = '<span class="label label-danger">'.'Đã hủy'.'</span>';
+			$status_parsed = '<span class="label label-danger">'.CANCELED_TEXT.'</span>';
 			break;
 
 		default:
-			$status_parsed = '<span class="label label-info">'.'Không có tình trạng'.'</span>';
+			$status_parsed = '<span class="label label-info">'.'Không xác định'.'</span>';
 			break;
 	}
 	return $status_parsed;

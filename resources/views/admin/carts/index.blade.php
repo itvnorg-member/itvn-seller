@@ -56,7 +56,7 @@
                     $('.cart-detail-wrapper').html(htmlTable);
 
                     $('#i-status-list').val(data.result["cart"].status);
-                    console.log(data.result["cart"].payment_status);
+                    // console.log(data.result["cart"].payment_status);
                     $('#i-payment-status-list').val(data.result["cart"].payment_status);
 
                     if (getSummaryCart(data.result["cart_detail"])['total_price'] !== null) {
@@ -92,6 +92,8 @@
 
         var cart_code = $("#code").text();
         var status_val = $("#i-status-list").val();
+        var payment_status_val = $("#i-payment-status-list").val();
+
         var alert_html = '<div class="alert alert-success alert-dismissable" id="i-alert-response">\
         <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>\
         <span></span>\
@@ -101,12 +103,12 @@
             type: 'PUT',
             data:{
                 cart_code:cart_code,
-                status: status_val
+                status: status_val,
+                payment_status: payment_status_val
             },
             dataType:'json'
         }).done(function(data) {
             if (!$.isEmptyObject(data)) {
-                console.log(data);
                 $(".alert-wrapper").html(alert_html);
                 $("#i-alert-response span").text(data.message);
                 $("#i-alert-response").show();
