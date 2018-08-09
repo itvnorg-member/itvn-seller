@@ -13,6 +13,7 @@ use App\Models\CartDetail;
 use App\Models\Customer;
 use App\Models\Supplier;
 use App\Models\Product;
+use App\Models\ProductDetail;
 use App\Models\Transport;
 use App\Models\City;
 use App\Repositories\PaymentRepository;
@@ -123,9 +124,9 @@ Class CartRepository
 
 	public function updateStatus($cartCode, $status){
 		$model = Cart::where('code','=',$cartCode)->first();
-        $model->status = $status;
-        $model->save();
-        return $model;
+		$model->status = $status;
+		$model->save();
+		return $model;
 	}
 
 	public function getTransports(){
@@ -149,7 +150,7 @@ Class CartRepository
 	public function createOrUpdate($data, $id = null){
 		if ($id) {
 			$model = Cart::find($id);
-            $model->code = general_code('DH', $id, 6);
+			$model->code = general_code('DH', $id, 6);
 		} else {
 			$model = new Cart;
 		}
@@ -196,10 +197,10 @@ Class CartRepository
 
 		$model->save();
 
-        if (is_null($id)) {
-            $model->code = general_code('DH', $model->id, 6);
-            $model->save();
-        }
+		if (is_null($id)) {
+			$model->code = general_code('DH', $model->id, 6);
+			$model->save();
+		}
 
 		// Excute cart details
 		if (isset($data['cart_details'])) {
@@ -210,7 +211,7 @@ Class CartRepository
 		if ($model->status = COMPLETED) {
 			$model->details;
 			$payment_repo = new PaymentRepository();
-			$payment_repo->createOrUpdate($model);
+			$payment = $payment_repo->createOrUpdate($model);
 		}
 
 		return $model;
@@ -259,6 +260,20 @@ Class CartRepository
 					$model->details()->save($modelDetail);
 				}
 			}
+
+			// Subtract product detail quantity
+			if ($detail->product_detail) {
+				if ($modelProductDetail = ProductDetail::find($detail->product_detail->id)) {
+					$modelProductDetail->quantity -= $detail->product_quantity;
+					$modelProductDetail->save();
+				}
+				
+				if ($modelProduct = Product::find($detail->product_detail->product_id)) {
+					$modelProduct->quantity_available -= $detail->product_quantity;
+					$modelProduct->save();
+				}
+			}
+			
 		}
 	}
 
