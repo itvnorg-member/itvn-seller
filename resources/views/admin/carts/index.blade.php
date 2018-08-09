@@ -132,6 +132,14 @@
     }
 
     $(document).ready(function () {
+        //---> Show menu on horizontal bar
+        var url_index = "{{route('admin.carts.index')}}";
+        if (location.href == url_index) {
+            // console.log(url_index+"  ---  "+location.href);
+            $(".cart-menu-wrapper").show();
+            $(".cart-menu-wrapper .cart-index").addClass("active");
+        }
+        
         $('#date_range_picker').datepicker({
             keyboardNavigation: false,
             forceParse: false,
