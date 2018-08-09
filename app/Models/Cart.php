@@ -12,7 +12,10 @@ class Cart extends Model
      * @var array
      */
     protected $fillable = [
-        'code', 'city_id', 'quantity', 'discount_amount', 'active'
+        'code', 'city_id', 'quantity', 'partner_discount_amount', 'customer_discount_amount',
+        'total_discount_amount', 'transport_id', 'customer_id', 'partner_id', 'price',
+        'total_price', 'shipping_fee', 'vat_percent', 'vat_amount', 'prepaid_amount',
+        'needed_paid', 'descritption', 'payment_status', 'status', 'active', 'order'
     ];
 
     /**
@@ -29,5 +32,15 @@ class Cart extends Model
     public function provider()
     {
         return $this->belongsTo('App\Models\Provider');
+    }
+
+    /**
+     * A product can have many photos.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function details() {
+
+        return $this->hasMany('App\Models\CartDetail');
     }
 }

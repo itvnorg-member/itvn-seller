@@ -24,4 +24,22 @@ class Customer extends Model
 
         return $this->hasMany('App\Models\Cart');
     }
+
+    /**
+     * A product detail can have many sizes.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function city() {
+
+        return $this->hasOne('App\Models\City', 'id', 'city_id');
+    }
+
+    /**
+     * Get the brand that owns the product.
+     */
+    public function groupCustomer()
+    {
+        return $this->belongsTo('App\Models\GroupCustomer');
+    }
 }
