@@ -139,7 +139,7 @@
             format: 'dd/mm/yyyy'
         });
 
-
+        var is_first_load = true;
         table = $('#dataTables').dataTable({
             searching: false,
             processing: true,
@@ -231,7 +231,11 @@
 
                     //---> Get customer detail
                     getRecordDetail();
-                    $('#dataTables tbody > tr:first').click();
+                    if (is_first_load) {
+                        $('#dataTables tbody > tr:first').click();
+                        is_first_load = false;
+                    }
+                    
                 },
             },
             columns: [
