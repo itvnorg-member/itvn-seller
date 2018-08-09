@@ -15,6 +15,7 @@ use App\Models\Supplier;
 use App\Models\Product;
 use App\Models\Transport;
 use App\Models\City;
+use App\Repositories\PaymentRepository;
 use Illuminate\Support\Facades\Cache;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -145,7 +146,6 @@ Class CartRepository
 		return make_option($this->getCities(), $id);
 	}
 
-
 	public function createOrUpdate($data, $id = null){
 		if ($id) {
 			$model = Cart::find($id);
@@ -206,8 +206,14 @@ Class CartRepository
 			$this->addDetails($model->id, $data['cart_details']);
 		}
 
-		return $model;
+		// Excute if cart status is COMPLETED then copy cart & cart detail to payment & payment detail
+		if ($model->status = COMPLETED) {
+			$model->details;
+			$payment_repo = new PaymentRepository();
+			$payment_repo->createOrUpdate($model);
+		}
 
+		return $model;
 	}
 
 	public function addDetails($id, $details){

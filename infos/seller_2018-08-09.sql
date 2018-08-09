@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-08-09 14:19:34
+Date: 2018-08-09 16:39:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -65,7 +65,7 @@ CREATE TABLE `carts` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of carts
@@ -73,6 +73,7 @@ CREATE TABLE `carts` (
 INSERT INTO `carts` VALUES ('1', '1', '3', '1', '1', 'phuocchich', '23', '2000', '1000', '3000', '1221311', '1112000', '1111', '10', '111200', '1111', '1220200', 'haha', '1', null, '1', '1', '0', '2018-08-08 21:23:13', '2018-08-09 13:52:55');
 INSERT INTO `carts` VALUES ('2', '1', '3', '1', '1', 'phuocchich1', '23', '2000', '1000', '3000', '1221311', '1112000', '1111', '10', '111200', '1111', '1220200', 'haha', '1', null, '1', '1', '0', '2018-08-08 21:23:39', '2018-08-09 13:52:57');
 INSERT INTO `carts` VALUES ('3', null, '3', '2', '1', 'phuocchich100', '28', '2000', '1000', '3000', '1222026', '1112650', '1111', '10', '111265', '1111', '1220915', 'haha', '1', null, '1', '1', '0', '2018-08-08 21:28:15', '2018-08-09 13:53:01');
+INSERT INTO `carts` VALUES ('4', '1', '4', '2', '1', 'D000004', '12', '10000', null, '10000', '4311', '12000', '1111', '10', '1200', '1111', '3200', '1231223123', '1', null, '4', '1', '0', '2018-08-09 02:52:43', '2018-08-09 04:02:55');
 
 -- ----------------------------
 -- Table structure for cart_detail
@@ -90,7 +91,7 @@ CREATE TABLE `cart_detail` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of cart_detail
@@ -100,6 +101,7 @@ INSERT INTO `cart_detail` VALUES ('2', '2', '3', '13', '11', '0', '100000', '110
 INSERT INTO `cart_detail` VALUES ('3', '3', '1', '10', '12', '0', '1000', '12000', '2018-08-08 21:28:15', '2018-08-08 21:28:15');
 INSERT INTO `cart_detail` VALUES ('4', '3', '3', '13', '11', '0', '100000', '1100000', '2018-08-08 21:28:15', '2018-08-08 21:28:15');
 INSERT INTO `cart_detail` VALUES ('5', '3', '5', '17', '5', '0', '130', '650', '2018-08-08 23:48:32', '2018-08-08 23:48:32');
+INSERT INTO `cart_detail` VALUES ('6', '4', '1', '10', '12', '0', '1000', '12000', '2018-08-09 02:52:43', '2018-08-09 02:52:43');
 
 -- ----------------------------
 -- Table structure for categories
@@ -191,7 +193,7 @@ CREATE TABLE `customers` (
 -- Records of customers
 -- ----------------------------
 INSERT INTO `customers` VALUES ('1', '1', '1', 'D00001', 'Dang', 'phidangmtv@gmail.com', '123 223 222', '5 lu gia', '1', '0', '2018-07-30 08:41:27', '2018-08-08 17:24:11');
-INSERT INTO `customers` VALUES ('2', null, null, null, 'Phuoc', 'dinhthienphuoc1990@gmail.com', '01264832673', '19 Nguyễn Đình Chiểu', '1', '0', '2018-08-08 23:48:32', '2018-08-08 23:48:32');
+INSERT INTO `customers` VALUES ('2', '1', null, null, 'Phuoc', 'dinhthienphuoc1990@gmail.com', '01264832673', '19 Nguyễn Đình Chiểu', '1', '0', '2018-08-08 23:48:32', '2018-08-09 14:59:15');
 
 -- ----------------------------
 -- Table structure for group_customers
@@ -293,6 +295,10 @@ CREATE TABLE `payments` (
   `shipping_fee` int(11) DEFAULT '0',
   `vat_percent` int(11) DEFAULT '0',
   `vat_amount` int(11) DEFAULT '0',
+  `prepaid_amount` int(11) DEFAULT NULL,
+  `needed_paid` int(11) DEFAULT NULL,
+  `descritption` varchar(255) DEFAULT NULL,
+  `payment_status` varchar(20) DEFAULT NULL,
   `platform_id` int(11) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
   `active` tinyint(1) DEFAULT '1',
@@ -300,11 +306,12 @@ CREATE TABLE `payments` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of payments
 -- ----------------------------
+INSERT INTO `payments` VALUES ('10', '4', '1', '4', '2', '1', 'D000004', '12', '10000', null, '10000', '4311', '12000', '1111', '10', '1200', '1111', '3200', '1231223123', '1', null, '4', '1', '0', '2018-08-09 04:37:41', '2018-08-09 04:37:41');
 
 -- ----------------------------
 -- Table structure for payment_detail
@@ -312,6 +319,7 @@ CREATE TABLE `payments` (
 DROP TABLE IF EXISTS `payment_detail`;
 CREATE TABLE `payment_detail` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `payment_id` int(11) NOT NULL,
   `cart_id` int(11) unsigned NOT NULL,
   `cart_detail_id` int(11) DEFAULT NULL,
   `product_id` int(11) unsigned NOT NULL,
@@ -323,11 +331,12 @@ CREATE TABLE `payment_detail` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of payment_detail
 -- ----------------------------
+INSERT INTO `payment_detail` VALUES ('3', '10', '4', '6', '1', '10', '12', '0', '1000', '12000', '2018-08-09 04:37:41', '2018-08-09 04:37:41');
 
 -- ----------------------------
 -- Table structure for permissions
