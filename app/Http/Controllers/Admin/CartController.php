@@ -116,4 +116,23 @@ class CartController extends AdminController
             'result' => $result
         ]);
     }
+
+    /**
+     * Update cart status the application dashboard.
+     * @param CartRepository $cart
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateStatus(CartRepository $cart){
+        $cartCode = $this->_request->get('cart_code');
+        $status = $this->_request->get('status');
+
+        $data = $cart->updateStatus($cartCode, $status);
+        $message = 'Tình trạng đơn hàng đã được cập nhật.';
+
+        return response()->json([
+            'success' => true,
+            'result' => $data,
+            'message' => $message,
+        ]);
+    }
 }

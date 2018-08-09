@@ -66,6 +66,12 @@ Class CartRepository
 					$sub->where('carts.created_at', '<=', date_create($request->get('end_date')));
 				});
 			}
+
+			if (trim($request->get('status')) !== "") {
+				$query->where(function ($sub) use ($request) {
+					$sub->where('carts.status', 'like', '%' . $request->get('status') . '%');
+				});
+			}
 			
 		}, true)
 		->addColumn('created_at', function ($cart) {
@@ -110,6 +116,13 @@ Class CartRepository
 		);
 
 		return $cartResult;
+	}
+
+	public function updateStatus($cartCode, $status){
+		$model = Cart::where('code','=',$cartCode)->first();
+        $model->status = $status;
+        $model->save();
+        return $model;
 	}
 
 }
