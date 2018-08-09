@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Cart extends Model
+class Payment extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,6 +12,7 @@ class Cart extends Model
      * @var array
      */
     protected $fillable = [
+        'cart_id',
         'code',
         'city_id',
         'platform_id',
@@ -31,29 +32,4 @@ class Cart extends Model
         'active'
     ];
 
-    /**
-     * Get the customer that owns the cart.
-     */
-    public function customer()
-    {
-        return $this->belongsTo('App\Models\Customer');
-    }
-
-    /**
-     * Get the provider that owns the cart.
-     */
-    public function provider()
-    {
-        return $this->belongsTo('App\Models\Provider');
-    }
-
-    /**
-     * A product can have many photos.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function details() {
-
-        return $this->hasMany('App\Models\CartDetail');
-    }
 }

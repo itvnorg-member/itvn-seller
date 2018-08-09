@@ -224,7 +224,10 @@ ul.nav-second-level{
   -webkit-transition: .4s;
   transition: .4s;
 }
-
+.tt-page{
+  font-size: 18px;
+  font-weight: 400;
+}
 input:checked + .slider {
   background-color: #18a689;
 }
@@ -238,7 +241,16 @@ input:checked + .slider:before {
   -ms-transform: translateX(18px);
   transform: translateX(18px);
 }
-
+.chart-legend ul li{
+  margin-bottom: 15px;
+}
+.legend-item{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  display:inline-block;
+  margin-right: 5px;
+}
 /* Rounded sliders */
 .slider.round {
   border-radius: 34px;
@@ -397,7 +409,6 @@ tr.error input, tr.error select {
     width: 28.333333%;
   }
 }
-
 
 #i-alert-response{
   display: none;

@@ -257,7 +257,6 @@
                     },
                     dataType:'json'
                 }).done(function(data) {
-                    console.log(data);
                     if (!$.isEmptyObject(data)) {
                         $('input[name="customer_name"]').val(data.customer.name);
                         $('input[name="customer_email"]').val(data.customer.email);
@@ -265,8 +264,8 @@
                         if (!$.isEmptyObject(data.customer.city)) {
                             $('select[name="customer_city"]').val(data.customer.city.id);
                         }
-                        if (!$.isEmptyObject(data.customer.group_customer)) {
-                            $('input[name="customer_discount_amount"]').val(data.customer.group_customer.discount_amount);
+                        if (!$.isEmptyObject(data.customer.group)) {
+                            $('input[name="customer_discount_amount"]').val(data.customer.group.discount_amount);
                         }
                         updateTotalDiscountAmount();
                     }else{

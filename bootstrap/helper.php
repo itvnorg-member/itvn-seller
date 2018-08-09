@@ -113,6 +113,17 @@ function array_to_string($array){
 	return $return;
 }
 
+function general_code($string, $id, $number)
+{
+    $arr = explode(' ', trim($string));
+    $code = '';
+    foreach($arr as $s)
+    {
+        $code .= strtoupper(substr($s,0,1));
+    }
+    return $code . sprintf('%0' . $number . 'd', $id);
+}
+
 function parse_status($status){
 	$status_parsed = '';
 	switch ($status) {

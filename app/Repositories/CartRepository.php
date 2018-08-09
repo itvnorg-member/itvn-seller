@@ -147,8 +147,10 @@ Class CartRepository
 
 
 	public function createOrUpdate($data, $id = null){
+		dd($data);
 		if ($id) {
 			$model = Cart::find($id);
+            $model->code = general_code('DH', $id, 6);
 		} else {
 			$model = new Cart;
 		}
@@ -175,7 +177,6 @@ Class CartRepository
 
 
 		$model->transport_id = $data['transporting_service'];
-		// $model->code = $data['???'];
 		$model->quantity = $data['quantity'];
 		$model->partner_discount_amount = $data['partner_discount_amount'];
 		$model->customer_discount_amount = $data['customer_discount_amount'];
@@ -195,6 +196,11 @@ Class CartRepository
 		// $model->order = $data['order'];
 
 		$model->save();
+
+        if (is_null($id)) {
+            $model->code = general_code('DH', $model->id, 6);
+            $model->save();
+        }
 
 		// Excute cart details
 		if (isset($data['cart_details'])) {

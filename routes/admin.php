@@ -23,6 +23,15 @@ Route::prefix('cong-tac-vien')
         Route::put ('/change-status', 'PartnerController@changeStatus')->name('admin.partners.changeStatus');
     });
 
+Route::prefix('doanh-thu')
+    ->middleware('permission:partner_manager')->group(function () {
+        Route::get ('/', 'PaymentController@index')->name('admin.payments.index');
+        Route::get ('/data-payment', 'PaymentController@getPaymentChart')->name('admin.payments.getPaymentChart');
+        Route::get ('/top-product', 'PaymentController@getTopProductSell')->name('admin.payments.getTopProductSell');
+        Route::get ('/top-platform', 'PaymentController@getTopPlatformSell')->name('admin.payments.getTopPlatformSell');
+        Route::get ('/top-category', 'PaymentController@getTopCategorySell')->name('admin.payments.getTopCategorySell');
+    });
+
 Route::prefix('nha-cung-cap')
     ->middleware('permission:supplier_manager')->group(function () {
         Route::get ('/', 'SupplierController@index')->name('admin.suppliers.index');
@@ -35,12 +44,13 @@ Route::prefix('nha-cung-cap')
 
 Route::prefix('khach-hang')
 ->middleware('permission:customer_manager')->group(function () {
-    Route::get ('/', 'CustomerController@index')->name('admin.customer.index');
-    Route::get ('/chi-tiet', 'CustomerController@view')->name('admin.customer.view');
-    Route::get ('/them', 'CustomerController@view')->name('admin.customer.create');
-    Route::post ('/them', 'CustomerController@store')->name('admin.customer.store');
-    Route::delete ('/', 'CustomerController@delete')->name('admin.customer.delete');
-    Route::put ('/change-status', 'CustomerController@changeStatus')->name('admin.customer.changeStatus');
+    Route::get ('/', 'CustomerController@index')->name('admin.customers.index');
+    Route::get ('/lich-su/{id}', 'CustomerController@history')->name('admin.customers.history')->where('id', '[0-9]+');;
+    Route::get ('/chi-tiet', 'CustomerController@view')->name('admin.customers.view');
+    Route::get ('/them', 'CustomerController@view')->name('admin.customers.create');
+    Route::post ('/them', 'CustomerController@store')->name('admin.customers.store');
+    Route::delete ('/', 'CustomerController@delete')->name('admin.customers.delete');
+    Route::put ('/change-status', 'CustomerController@changeStatus')->name('admin.customers.changeStatus');
 
     Route::get ('/nhom/', 'GroupCustomerController@index')->name('admin.groupCustomer.index');
     Route::get ('/nhom/chi-tiet', 'GroupCustomerController@view')->name('admin.groupCustomer.view');
