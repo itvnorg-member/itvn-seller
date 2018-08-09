@@ -269,7 +269,7 @@ Class CartRepository
 			}
 
 			// Subtract product detail quantity
-			if ($detail->product_detail) {
+			if (isset($detail->product_detail)) {
 				if ($modelProductDetail = ProductDetail::find($detail->product_detail->id)) {
 					$modelProductDetail->quantity -= $detail->product_quantity;
 					$modelProductDetail->save();
