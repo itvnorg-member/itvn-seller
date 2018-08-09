@@ -16,6 +16,7 @@ use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\Transport;
 use App\Models\City;
+use App\Models\Payment;
 use App\Repositories\PaymentRepository;
 use Illuminate\Support\Facades\Cache;
 use Yajra\DataTables\Facades\DataTables;
@@ -31,7 +32,6 @@ Class CartRepository
 		->join('cart_detail', 'cart_detail.cart_id', '=', 'carts.id')
 		->join('products', 'products.id', '=', 'cart_detail.product_id')
 		->join('suppliers', 'suppliers.id', '=', 'products.supplier_id');
-
 
 		$dataTable = DataTables::eloquent($carts)
 		->filter(function ($query) use ($request) {
@@ -98,12 +98,13 @@ Class CartRepository
 	}
 
 	public function getCartDetail($cartCode){
-		$cart = Cart::select(['carts.id', 'carts.city_id', 'carts.partner_id', 'carts.customer_id', 'carts.code', 'carts.quantity', 'carts.status', 'carts.active', 'carts.created_at', 'carts.transport_id as transport_id', 'customers.name as customer_name', 'customers.phone as customer_phone', 'customers.email as customer_email', 'customers.address as customer_address', 'cart_detail.product_id', 'suppliers.name as supplier_name', 'transports.name as transport_name'])
+		$cart = Cart::select(['carts.id', 'carts.city_id', 'carts.partner_id', 'carts.customer_id', 'carts.code', 'carts.quantity', 'carts.status', 'carts.active', 'carts.created_at', 'carts.transport_id as transport_id', 'customers.name as customer_name', 'customers.phone as customer_phone', 'customers.email as customer_email', 'customers.address as customer_address', 'cart_detail.product_id', 'suppliers.name as supplier_name', 'transports.name as transport_name', 'payments.status as payment_status'])
 		->join('customers', 'customers.id', '=', 'carts.customer_id')
 		->join('cart_detail', 'cart_detail.cart_id', '=', 'carts.id')
 		->join('products', 'products.id', '=', 'cart_detail.product_id')
 		->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
 		->join('transports', 'transports.id', '=', 'carts.transport_id')
+		->join('payments', 'payments.cart_id', '=', 'carts.id')
 		->where('carts.code', '=', $cartCode)
 		->first();
 

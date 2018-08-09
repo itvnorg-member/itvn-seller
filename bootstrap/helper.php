@@ -127,22 +127,26 @@ function general_code($string, $id, $number)
 function parse_status($status){
 	$status_parsed = '';
 	switch ($status) {
-		case CART_NEW:
-			$status_parsed = '<span class="label label-info">'.'Mới'.'</span>';
+		case EXCUTING:
+			$status_parsed = '<span class="label label-primary">'.'Chưa giao'.'</span>';
 			break;
 
-		case CART_COMPLETE:
-			$status_parsed = '<span class="label label-success">'.'Hoàn thành'.'</span>';
+		case TRANSPORTING:
+			$status_parsed = '<span class="label label-info">'.'Đang giao'.'</span>';
 			break;
 
-		case CART_IN_PROGRESS:
-			$status_parsed = '<span class="label label-warning">'.'Đang giao'.'</span>';
+		case TRANSPORTED:
+			$status_parsed = '<span class="label label-warning">'.'Đã giao'.'</span>';
 			break;
 
-		case CART_CANCELED:
+		case COMPLETED:
+			$status_parsed = '<span class="label label-success">'.'Đã hoàn tất'.'</span>';
+			break;
+
+		case CANCELED:
 			$status_parsed = '<span class="label label-danger">'.'Đã hủy'.'</span>';
 			break;
-		
+
 		default:
 			$status_parsed = '<span class="label label-info">'.'Không có tình trạng'.'</span>';
 			break;
