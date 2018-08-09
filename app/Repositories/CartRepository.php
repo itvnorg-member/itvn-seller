@@ -126,9 +126,9 @@ Class CartRepository
 	}
 
 	public function updateStatus($request){
-        $cartCode = $request->get('cart_code');
-        $status = $request->get('status');
-        $payment_status = $request->get('payment_status');
+		$cartCode = $request->get('cart_code');
+		$status = $request->get('status');
+		$payment_status = $request->get('payment_status');
 		$model = Cart::where('code','=',$cartCode)->first();
 		$model->status = $status;
 		$model->payment_status = $payment_status;
@@ -167,7 +167,13 @@ Class CartRepository
 
 		// Excute customer
 		if ($customer = Customer::find($data['customer_phone'])) {
-			$model->customer_id = $data['customer_phone'];
+			$customer->city_id = $data['customer_city'];
+			$customer->name = $data['customer_name'];
+			$customer->email = $data['customer_email'];
+			// $customer->phone = $data['customer_phone'];
+			$customer->address = $data['customer_address'];
+
+			$customer->save();
 		}else{
 			$customer = new Customer;
 
@@ -178,9 +184,9 @@ Class CartRepository
 			$customer->address = $data['customer_address'];
 
 			$customer->save();
-
-			$model->customer_id = $customer->id;
 		}
+		
+		$model->customer_id = $customer->id;
 
 
 		$model->transport_id = $data['transporting_service'];
