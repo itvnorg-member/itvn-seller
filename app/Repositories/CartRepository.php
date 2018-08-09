@@ -147,7 +147,6 @@ Class CartRepository
 
 
 	public function createOrUpdate($data, $id = null){
-		dd($data);
 		if ($id) {
 			$model = Cart::find($id);
             $model->code = general_code('DH', $id, 6);
