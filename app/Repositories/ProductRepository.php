@@ -114,7 +114,7 @@ Class ProductRepository
 		$model->order = $data['order'];
 		$model->description = $data['description'];
 		$model->quantity = $data['quantity'];
-		$model->quantity_available = $data['quantity_available'];
+		$model->quantity_available = $data['quantity'];
 		$model->brand_id = $data['brand_id'];
 		$model->content = $data['content'];
 		$model->code = $data['code'];
