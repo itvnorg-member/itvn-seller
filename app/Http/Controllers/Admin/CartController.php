@@ -180,9 +180,11 @@ class CartController extends AdminController
     public function getCartDetail(CartRepository $cart){
         $cartCode = $this->_request->get('cart_code');
         $result = $cart->getCartDetail($cartCode);
+        $view = view("admin._partials._cart_details", compact(['result']))->render();
         return response()->json([
             'success' => true,
-            'result' => $result
+            'result' => $result,
+            'html' => $view
         ]);
     }
 
@@ -201,5 +203,23 @@ class CartController extends AdminController
             'result' => $data,
             'message' => $message,
         ]);
+    }
+
+    public function getProductAjax(ProductRepository $product){
+        $data = $product->getProductsV2($this->_request);
+        $message = 'Không có sản phẩm';
+        if (count($data)) {
+            $message = 'Sản phẩm được lấy thành công.';
+        }
+         return response()->json($data);
+    }
+
+    public function getPhoneAjax(CustomerRepository $customer){
+        $data = $customer->getCustomersV2($this->_request);
+        $message = 'Không có số điện thoại nào';
+        if (count($data)) {
+            $message = 'Số điện thoại được lấy thành công.';
+        }
+         return response()->json($data);
     }
 }

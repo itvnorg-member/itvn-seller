@@ -104,7 +104,6 @@ Class CartRepository
 		->join('products', 'products.id', '=', 'cart_detail.product_id')
 		->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
 		->join('transports', 'transports.id', '=', 'carts.transport_id')
-		// ->join('payments', 'payments.cart_id', '=', 'carts.id')
 		->where('carts.code', '=', $cartCode)
 		->first();
 
@@ -117,9 +116,7 @@ Class CartRepository
 
 		$cartResult = array(
 			"cart" => $cart,
-			"cart_detail" => $cartDetails,
-			// 'payment_options' =>  make_payment_status_options($cart->payment_status),
-			// 'status_options' =>  make_cart_status_options($cart->status),
+			"cart_details" => $cartDetails,
 		);
 
 		return $cartResult;

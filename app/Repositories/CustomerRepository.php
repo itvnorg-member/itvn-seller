@@ -175,4 +175,17 @@ class CustomerRepository
 
         return Response::json($return);
     }
+
+    public function getCustomersV2($request)
+    {
+        $formatted_customers = [];
+        $term = trim($request->q);
+
+        $customers_list = Customer::where('phone','LIKE', '%'.$term.'%')->get();
+        foreach ($customers_list as $customer) {
+            $formatted_customers[] = ['id' => $customer->id, 'text' => $customer->phone];
+        }
+
+        return $formatted_customers;
+    }
 }

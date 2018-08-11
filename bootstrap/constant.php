@@ -34,3 +34,6 @@ define('TRANSPORTING_TEXT', 'Đang giao');
 define('TRANSPORTED_TEXT', 'Đã giao');
 define('COMPLETED_TEXT', 'Đã hoàn tất');
 define('CANCELED_TEXT', 'Đã hủy');
+
+//----> Label
+define('LBL_DATA_IS_NULL', 'Dữ liệu rỗng');
